@@ -14,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Notification {
 
-    @Lob
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "notification_id")

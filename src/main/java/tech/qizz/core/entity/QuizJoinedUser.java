@@ -18,7 +18,6 @@ import java.util.List;
 @NoArgsConstructor
 public class QuizJoinedUser {
 
-    @Lob
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "quiz_joined_user_id")

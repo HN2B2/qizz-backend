@@ -9,7 +9,6 @@ import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "quizzes")
@@ -19,7 +18,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class Quiz {
 
-    @Lob
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "quiz_id")
@@ -70,7 +68,6 @@ public class Quiz {
     @Column(name = "total_joined", nullable = false)
     private long totalJoined;
 
-
     @JsonIgnore
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
     private List<QuizSetting> quizSettings;
@@ -83,25 +80,9 @@ public class Quiz {
     @JoinColumn(name = "bank_id", referencedColumnName = "quiz_bank_id")
     private QuizBank quizBank;
 
-//    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-//    @JoinTable(
-//            name = "quiz_joined_users",
-//            joinColumns = @JoinColumn(name = "quiz_id", referencedColumnName = "quiz_id"),
-//            inverseJoinColumns = @JoinColumn(name = "user_id",referencedColumnName = "user_id")
-//    )
-//    private Set<User> users;
-
     @JsonIgnore
     @OneToMany(mappedBy = "quiz",cascade = CascadeType.ALL)
     private List<QuizJoinedUser> quizJoinedUsers;
-
-//    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-//    @JoinTable(
-//            name = "quiz_questions",
-//            joinColumns = @JoinColumn(name = "quiz_id", referencedColumnName = "quiz_id"),
-//            inverseJoinColumns = @JoinColumn(name = "question_id", referencedColumnName = "question_id")
-//    )
-//    private Set<Question> questions;
 
     @JsonIgnore
     @OneToMany(mappedBy = "quiz",cascade = CascadeType.ALL)

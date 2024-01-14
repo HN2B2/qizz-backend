@@ -6,7 +6,6 @@ import lombok.*;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "questions")
@@ -16,7 +15,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class Question {
 
-    @Lob
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "question_id")
@@ -32,7 +30,7 @@ public class Question {
 
     @Temporal(TemporalType.TIME)
     @Column(name = "duration",nullable = false)
-    private Date durataion;
+    private Date duration;
 
     @Column(name = "type", nullable = false)
     private String type;
@@ -78,7 +76,4 @@ public class Question {
     @JsonIgnore
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<QuizQuestion> quizQuestions;
-
-//    @ManyToMany(mappedBy = "questions",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-//    private Set<Quiz> intermediateQuizs;
 }

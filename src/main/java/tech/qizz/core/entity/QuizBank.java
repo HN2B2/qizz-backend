@@ -19,7 +19,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class QuizBank {
 
-    @Lob
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "quiz_bank_id")
@@ -55,8 +54,8 @@ public class QuizBank {
         modifiedAt = new Date();
     }
 
-    @Column(name = "quiz_publicable")
-    private Boolean quizPublicable;
+    @Column(name = "quiz_publicity")
+    private Boolean quizPublicity;
 
     @Column(name = "public_editable")
     private Boolean publicEditable;
@@ -64,7 +63,7 @@ public class QuizBank {
 
     @JsonIgnore
     @OneToMany(mappedBy = "quizBank", cascade = CascadeType.ALL)
-    private List<Quiz> quizzess;
+    private List<Quiz> quizzes;
 
     @JsonIgnore
     @OneToMany(mappedBy = "quizBank", cascade = CascadeType.ALL)

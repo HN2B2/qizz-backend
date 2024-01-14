@@ -11,7 +11,6 @@ import lombok.*;
 @NoArgsConstructor
 public class FeedBack {
 
-    @Lob
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "feedback_id")
@@ -20,7 +19,6 @@ public class FeedBack {
     @Lob
     @Column(name = "content", nullable = false)
     private String content;
-
 
     @ManyToOne
     @JoinColumn(name = "user_id",referencedColumnName = "user_id")

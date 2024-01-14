@@ -1,7 +1,6 @@
 package tech.qizz.core.entity;
 
 import jakarta.persistence.*;
-import jdk.jfr.Registered;
 import lombok.*;
 
 @Entity

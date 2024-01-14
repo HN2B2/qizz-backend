@@ -16,7 +16,6 @@ import java.util.Date;
 @NoArgsConstructor
 public class QuestionHistory {
 
-    @Lob
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "question_history_id")

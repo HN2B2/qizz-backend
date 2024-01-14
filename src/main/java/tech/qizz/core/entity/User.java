@@ -19,7 +19,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class User {
 
-    @Lob
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -63,7 +62,6 @@ public class User {
     @Column(name = "banned")
     private Boolean banned;
 
-
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<FeedBack> feedbacks;
@@ -82,11 +80,11 @@ public class User {
 
     @JsonIgnore
     @OneToMany(mappedBy = "createdBy")
-    private List<Quiz> quizzess;
+    private List<Quiz> quizzes;
 
     @JsonIgnore
     @OneToMany(mappedBy = "createdBy")
-    private List<QuizBank> createrQuizBanks;
+    private List<QuizBank> creatorQuizBanks;
 
     @JsonIgnore
     @OneToMany(mappedBy = "modifiedBy")
@@ -95,9 +93,6 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<QuizJoinedUser> quizJoinedUsers;
-
-//    @ManyToMany(mappedBy = "users",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-//    private Set<Quiz> intermediateQuizs;
 
     @ManyToMany(mappedBy = "users",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<QuizBank> intermediateFavoriteBanks;

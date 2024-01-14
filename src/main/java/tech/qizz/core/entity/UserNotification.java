@@ -14,7 +14,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserNotification {
 
-    @Lob
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_notification_id")
@@ -34,6 +33,4 @@ public class UserNotification {
     @ManyToOne
     @JoinColumn(name = "notification_id",referencedColumnName = "notification_id")
     private Notification notification;
-
-
 }

@@ -15,7 +15,6 @@ import lombok.Setter;
 public class QuizSetting {
 
 
-    @Lob
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "quiz_setting_id")
