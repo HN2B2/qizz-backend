@@ -14,24 +14,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Category {
-
-
-
-    @Lob
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "category_id")
     private long categoryId;
 
-
-
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, columnDefinition = "NVARCHAR()")
     private String name;
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-
 
     @Column(name = "modified_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -48,9 +41,8 @@ public class Category {
         modifiedAt = new Date();
     }
 
-
     @Lob
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
 
     @JsonIgnore

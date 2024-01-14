@@ -12,7 +12,6 @@ import lombok.*;
 @NoArgsConstructor
 public class PowerUp {
 
-    @Lob
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "power_up_id")

@@ -16,7 +16,6 @@ import java.util.Date;
 @NoArgsConstructor
 public class QuizSubCategory {
 
-    @Lob
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "quiz_sub_category_id")

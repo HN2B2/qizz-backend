@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 
 import java.util.Date;
 import java.util.List;
@@ -18,13 +19,13 @@ import java.util.Set;
 @NoArgsConstructor
 public class SubCategory {
 
-    @Lob
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "sub_category_id")
     private long subCategoryId;
 
     @Column(name = "name", nullable = false)
+    @Nationalized
     private String name;
 
     @Column(name = "created_at")
@@ -48,8 +49,8 @@ public class SubCategory {
 
     @Lob
     @Column(name = "description", nullable = false)
+    @Nationalized
     private String description;
-
 
     @ManyToOne
     @JoinColumn(name = "category_id",referencedColumnName = "category_id")
