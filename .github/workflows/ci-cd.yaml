@@ -6,7 +6,7 @@ on:
     workflow_dispatch:
 
 jobs:
-    stop:
+    build:
         runs-on: self-hosted
 
         steps:
@@ -21,18 +21,6 @@ jobs:
                   fi
               shell: bash
 
-            - name: Stop and remove docker containers
-              run: docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)
-              shell: bash
-
-            - name: Remove old images
-              run: docker rmi $(docker images 'qizz-backend-app' -a -q)
-              shell: bash
-    build:
-        needs: stop
-        runs-on: self-hosted
-
-        steps:
             - name: Create secret .env file
               run: 'echo "$SECRET" > .env'
               shell: bash
@@ -48,3 +36,6 @@ jobs:
         steps:
             - name: Deploy docker images
               run: docker compose up -d
+
+            - name: Remove old images
+              run: docker image prune -a -f
