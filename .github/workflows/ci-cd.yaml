@@ -6,7 +6,7 @@ on:
     workflow_dispatch:
 
 jobs:
-    build:
+    stop:
         runs-on: self-hosted
 
         steps:
@@ -14,13 +14,22 @@ jobs:
 
             - name: Make sure everything is correctly installed
               run: |
-                  if ! command -v docker &> /dev/null
+                if ! command -v docker &> /dev/null
                   then
                     echo "Cannot find docker, please install docker first"
                     exit
                   fi
-              shell: bash
+                shell: bash 
 
+            - name: Stop docker containers
+              run: docker compose down --remove-orphans
+
+            - name: Remove old images
+              run: docker rmi $(docker images 'qizz-backend-app' -a -q)
+    build:
+        runs-on: self-hosted
+
+        steps:
             - name: Create secret .env file
               run: 'echo "$SECRET" > .env'
               shell: bash
