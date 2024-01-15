@@ -11,6 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class Hello {
     @GetMapping()
     public ResponseEntity<String> hello() {
-        return new ResponseEntity<>("Hello World!", HttpStatus.OK);
+        return new ResponseEntity<>("Hello World!!", HttpStatus.OK);
     }
 }
