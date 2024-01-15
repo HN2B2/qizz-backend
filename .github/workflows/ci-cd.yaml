@@ -27,6 +27,7 @@ jobs:
             - name: Remove old images
               run: docker rmi $(docker images 'qizz-backend-app' -a -q)
     build:
+        needs: stop
         runs-on: self-hosted
 
         steps:
