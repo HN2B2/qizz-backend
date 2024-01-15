@@ -40,25 +40,21 @@ public class QuestionHistory {
         modifiedAt = new Date();
     }
 
-
     @Column(name = "answer_metadata", nullable = false)
     private String answerMetadata;
-
 
     @Column(name = "score", nullable = false)
     private long score;
 
-
     @Temporal(TemporalType.TIME)
-    @Column(name = "answer_time",nullable = false)
+    @Column(name = "answer_time", nullable = false)
     private Date answerTime;
 
-
     @ManyToOne
-    @JoinColumn(name = "quiz_joined_user_id",referencedColumnName = "quiz_joined_user_id")
+    @JoinColumn(name = "quiz_joined_user_id", referencedColumnName = "quiz_joined_user_id")
     private QuizJoinedUser quizJoinedUser;
 
     @ManyToOne
-    @JoinColumn(name = "quiz_question_id",referencedColumnName = "quiz_question_id")
+    @JoinColumn(name = "quiz_question_id", referencedColumnName = "quiz_question_id")
     private QuizQuestion quizQuestion;
 }

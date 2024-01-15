@@ -73,7 +73,7 @@ public class Quiz {
     private List<QuizSetting> quizSettings;
 
     @ManyToOne
-    @JoinColumn(name = "created_by",referencedColumnName = "user_id")
+    @JoinColumn(name = "created_by", referencedColumnName = "user_id")
     private User createdBy;
 
     @ManyToOne
@@ -81,11 +81,11 @@ public class Quiz {
     private QuizBank quizBank;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "quiz",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
     private List<QuizJoinedUser> quizJoinedUsers;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "quiz",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
     private List<QuizQuestion> quizQuestions;
 
 }

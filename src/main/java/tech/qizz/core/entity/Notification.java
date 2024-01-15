@@ -42,6 +42,6 @@ public class Notification {
         modifiedAt = new Date();
     }
 
-    @OneToMany(mappedBy = "notification",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "notification", cascade = CascadeType.ALL)
     private List<UserNotification> userNotifications;
 }

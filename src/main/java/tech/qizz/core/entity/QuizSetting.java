@@ -14,21 +14,20 @@ import lombok.Setter;
 @NoArgsConstructor
 public class QuizSetting {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "quiz_setting_id")
     private long quizSettingId;
 
     @Lob
-    @Column(name = "`key`",columnDefinition = "TEXT")
+    @Column(name = "`key`", columnDefinition = "TEXT")
     private String key;
 
     @Lob
-    @Column(name = "`value`",columnDefinition = "TEXT")
+    @Column(name = "`value`", columnDefinition = "TEXT")
     private String value;
 
     @ManyToOne
-    @JoinColumn(name = "quiz_id",referencedColumnName = "quiz_id")
+    @JoinColumn(name = "quiz_id", referencedColumnName = "quiz_id")
     private Quiz quiz;
 }

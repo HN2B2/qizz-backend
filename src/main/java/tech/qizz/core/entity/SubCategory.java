@@ -52,7 +52,7 @@ public class SubCategory {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "category_id",referencedColumnName = "category_id")
+    @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     private Category category;
 
     @ManyToMany(mappedBy = "subCategories")

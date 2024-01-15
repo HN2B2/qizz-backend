@@ -94,9 +94,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<QuizJoinedUser> quizJoinedUsers;
 
-    @ManyToMany(mappedBy = "users",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<QuizBank> intermediateFavoriteBanks;
 
-    @ManyToMany(mappedBy = "manageUsers", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private  Set<QuizBank> intermediateManageQuizBanks;
+    @ManyToMany(mappedBy = "manageUsers", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<QuizBank> intermediateManageQuizBanks;
 }

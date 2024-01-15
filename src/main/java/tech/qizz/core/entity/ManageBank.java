@@ -39,5 +39,4 @@ public class ManageBank {
     @Column(name = "editable")
     private Boolean editable;
 
-
 }
