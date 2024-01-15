@@ -26,9 +26,6 @@ jobs:
               shell: bash
               env:
                   SECRET: ${{ vars.ENV }}
-            - name: Export secret .env file
-              run: 'export $(cat .env | xargs)'
-              shell: bash
 
             - name: Build docker images
               run: docker compose build
