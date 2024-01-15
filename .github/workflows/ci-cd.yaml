@@ -23,9 +23,11 @@ jobs:
 
             - name: Stop and remove docker containers
               run: docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)
+              shell: bash
 
             - name: Remove old images
               run: docker rmi $(docker images 'qizz-backend-app' -a -q)
+              shell: bash
     build:
         needs: stop
         runs-on: self-hosted
