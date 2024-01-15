@@ -71,27 +71,27 @@ public class User {
     private List<UserMetadata> userMetadatas;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "receiver")
+    @OneToMany(mappedBy = "receiver",cascade = CascadeType.ALL)
     private List<UserNotification> receiverNotifications;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "sender")
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
     private List<UserNotification> senderNotifications;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "createdBy")
+    @OneToMany(mappedBy = "createdBy",cascade = CascadeType.ALL)
     private List<Quiz> quizzes;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "createdBy")
+    @OneToMany(mappedBy = "createdBy",cascade = CascadeType.ALL)
     private List<QuizBank> creatorQuizBanks;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "modifiedBy")
+    @OneToMany(mappedBy = "modifiedBy", cascade = CascadeType.ALL)
     private List<QuizBank> modifierQuizBanks;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<QuizJoinedUser> quizJoinedUsers;
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
