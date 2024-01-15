@@ -19,7 +19,7 @@ jobs:
                     echo "Cannot find docker, please install docker first"
                     exit
                   fi
-                shell: bash 
+              shell: bash
 
             - name: Stop docker containers
               run: docker compose down --remove-orphans
