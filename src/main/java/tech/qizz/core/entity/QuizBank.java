@@ -60,7 +60,6 @@ public class QuizBank {
     @Column(name = "public_editable")
     private Boolean publicEditable;
 
-
     @JsonIgnore
     @OneToMany(mappedBy = "quizBank", cascade = CascadeType.ALL)
     private List<Quiz> quizzes;
@@ -78,27 +77,14 @@ public class QuizBank {
     private User modifiedBy;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-        name = "quiz_sub_categories",
-        joinColumns = @JoinColumn(name = "bank_id", referencedColumnName = "quiz_bank_id"),
-        inverseJoinColumns = @JoinColumn(name = "sub_category_id", referencedColumnName = "sub_category_id")
-    )
+    @JoinTable(name = "quiz_sub_categories", joinColumns = @JoinColumn(name = "bank_id", referencedColumnName = "quiz_bank_id"), inverseJoinColumns = @JoinColumn(name = "sub_category_id", referencedColumnName = "sub_category_id"))
     private Set<SubCategory> subCategories;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-        name = "favorite_banks",
-        joinColumns = @JoinColumn(name = "bank_id", referencedColumnName = "quiz_bank_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    )
+    @JoinTable(name = "favorite_banks", joinColumns = @JoinColumn(name = "bank_id", referencedColumnName = "quiz_bank_id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
     private Set<User> users;
 
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-        name = "manage_banks",
-        joinColumns = @JoinColumn(name = "bank_id", referencedColumnName = "quiz_bank_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    )
+    @JoinTable(name = "manage_banks", joinColumns = @JoinColumn(name = "bank_id", referencedColumnName = "quiz_bank_id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
     private Set<User> manageUsers;
 }

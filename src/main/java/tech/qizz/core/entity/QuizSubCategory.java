@@ -40,5 +40,4 @@ public class QuizSubCategory {
         modifiedAt = new Date();
     }
 
-
 }

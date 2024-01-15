@@ -29,7 +29,7 @@ public class Question {
     private long point;
 
     @Temporal(TemporalType.TIME)
-    @Column(name = "duration",nullable = false)
+    @Column(name = "duration", nullable = false)
     private Date duration;
 
     @Column(name = "type", nullable = false)
@@ -70,7 +70,7 @@ public class Question {
     private Boolean disabled;
 
     @ManyToOne
-    @JoinColumn(name = "bank_id",referencedColumnName = "quiz_bank_id")
+    @JoinColumn(name = "bank_id", referencedColumnName = "quiz_bank_id")
     private QuizBank quizBank;
 
     @JsonIgnore

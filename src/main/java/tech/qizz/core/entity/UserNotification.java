@@ -23,14 +23,14 @@ public class UserNotification {
     private Boolean checked;
 
     @ManyToOne
-    @JoinColumn(name = "receiver_id",referencedColumnName = "user_id")
+    @JoinColumn(name = "receiver_id", referencedColumnName = "user_id")
     private User receiver;
 
     @ManyToOne
-    @JoinColumn(name = "sender_id",referencedColumnName = "user_id")
+    @JoinColumn(name = "sender_id", referencedColumnName = "user_id")
     private User sender;
 
     @ManyToOne
-    @JoinColumn(name = "notification_id",referencedColumnName = "notification_id")
+    @JoinColumn(name = "notification_id", referencedColumnName = "notification_id")
     private Notification notification;
 }

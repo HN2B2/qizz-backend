@@ -41,10 +41,8 @@ public class QuizQuestion {
         modifiedAt = new Date();
     }
 
-
     @OneToMany(mappedBy = "quizQuestion", cascade = CascadeType.ALL)
     private List<QuestionHistory> questionHistories;
-
 
     @ManyToOne
     @JoinColumn(name = "quiz_id", referencedColumnName = "quiz_id")
