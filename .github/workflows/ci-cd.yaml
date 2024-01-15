@@ -21,8 +21,8 @@ jobs:
                   fi
               shell: bash
 
-            - name: Stop docker containers
-              run: docker compose down --remove-orphans
+            - name: Stop and remove docker containers
+              run: docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)
 
             - name: Remove old images
               run: docker rmi $(docker images 'qizz-backend-app' -a -q)
