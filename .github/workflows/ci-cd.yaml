@@ -14,7 +14,7 @@ jobs:
 
             - name: Make sure everything is correctly installed
               run: |
-                  if ! command -v docker &> /dev/null
+                if ! command -v docker &> /dev/null
                   then
                     echo "Cannot find docker, please install docker first"
                     exit
@@ -26,9 +26,6 @@ jobs:
               shell: bash
               env:
                   SECRET: ${{ vars.ENV }}
-            - name: Export secret .env file
-              run: 'export $(cat .env | xargs)'
-              shell: bash
 
             - name: Build docker images
               run: docker compose build
@@ -39,3 +36,6 @@ jobs:
         steps:
             - name: Deploy docker images
               run: docker compose up -d
+
+            - name: Remove old images
+              run: docker image prune -a -f
