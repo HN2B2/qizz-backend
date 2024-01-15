@@ -1,5 +1,6 @@
 package tech.qizz.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -42,6 +43,7 @@ public class Notification {
         modifiedAt = new Date();
     }
 
+    @JsonIgnore
     @OneToMany(mappedBy = "notification", cascade = CascadeType.ALL)
     private List<UserNotification> userNotifications;
 }

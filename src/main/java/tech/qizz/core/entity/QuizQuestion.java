@@ -1,5 +1,6 @@
 package tech.qizz.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,6 +42,7 @@ public class QuizQuestion {
         modifiedAt = new Date();
     }
 
+    @JsonIgnore
     @OneToMany(mappedBy = "quizQuestion", cascade = CascadeType.ALL)
     private List<QuestionHistory> questionHistories;
 
