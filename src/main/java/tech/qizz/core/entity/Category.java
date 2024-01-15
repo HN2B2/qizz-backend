@@ -19,7 +19,7 @@ public class Category {
     @Column(name = "category_id")
     private long categoryId;
 
-    @Column(name = "name", nullable = false, columnDefinition = "NVARCHAR()")
+    @Column(name = "name")
     private String name;
 
     @Column(name = "created_at")
