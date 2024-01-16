@@ -87,4 +87,12 @@ public class QuizBank {
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "manage_banks", joinColumns = @JoinColumn(name = "bank_id", referencedColumnName = "quiz_bank_id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
     private Set<User> manageUsers;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "upvote_banks",
+            joinColumns = @JoinColumn(name = "bank_id", referencedColumnName = "quiz_bank_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    )
+    private Set<User> upVoteUsers;
 }

@@ -99,4 +99,7 @@ public class User {
 
     @ManyToMany(mappedBy = "manageUsers", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<QuizBank> intermediateManageQuizBanks;
+
+    @ManyToMany(mappedBy = "upVoteUsers", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<QuizBank> intermediateUpvotedQuizBanks;
 }
