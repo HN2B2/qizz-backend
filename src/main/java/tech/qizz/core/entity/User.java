@@ -1,12 +1,32 @@
 package tech.qizz.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import lombok.*;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import tech.qizz.core.user.constant.UserRole;
 
 @Entity
 @Table(name = "users")
@@ -36,7 +56,8 @@ public class User {
     private String password;
 
     @Column(name = "role", nullable = false)
-    private String role;
+    @Enumerated(value = EnumType.STRING)
+    private UserRole role;
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -69,7 +90,7 @@ public class User {
     private List<UserMetadata> userMetadatas;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "receiver",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
     private List<UserNotification> receiverNotifications;
 
     @JsonIgnore
@@ -77,11 +98,11 @@ public class User {
     private List<UserNotification> senderNotifications;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "createdBy",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
     private List<Quiz> quizzes;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "createdBy",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
     private List<QuizBank> creatorQuizBanks;
 
     @JsonIgnore
@@ -89,7 +110,7 @@ public class User {
     private List<QuizBank> modifierQuizBanks;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<QuizJoinedUser> quizJoinedUsers;
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

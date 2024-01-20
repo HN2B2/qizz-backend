@@ -1,4 +1,4 @@
-package tech.qizz.core.constant;
+package tech.qizz.core.user.constant;
 
 import java.util.Arrays;
 
