@@ -6,30 +6,23 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tech.qizz.core.entity.User;
+import tech.qizz.core.entity.constant.UserRole;
 import tech.qizz.core.exception.NotFoundException;
-import tech.qizz.core.user.constant.UserRole;
 import tech.qizz.core.user.dto.CreateUserRequest;
 import tech.qizz.core.user.dto.GetAllUserResponse;
 import tech.qizz.core.user.dto.UserResponse;
+import tech.qizz.core.util.Helper;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    String[] adjectives = {"Funny", "Silly", "Goofy", "Wacky", "Whimsical", "Zany", "Cheeky",
-        "Quirky", "Ludicrous", "Absurd"};
-    String[] nouns = {"Banana", "Penguin", "Pickle", "Kumquat", "Squid", "Toaster", "Noodle",
-        "Walrus", "Pancake", "Jellyfish"};
-
-    public String generateUsername() {
-        String adjective = adjectives[(int) (Math.random() * adjectives.length)];
-        String noun = nouns[(int) (Math.random() * nouns.length)];
-        return adjective + " " + noun;
-    }
-
     private final UserRepository userRepository;
+    private final Helper helper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public GetAllUserResponse getAllUser(
@@ -62,10 +55,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse createUser(CreateUserRequest body) {
         User user = User.builder()
-            .displayName(this.generateUsername())
+            .displayName(helper.generateUsername())
             .email(body.getEmail())
             .username(body.getUsername())
-            .password(body.getPassword())
+            .password(passwordEncoder.encode(body.getPassword()))
             .role(UserRole.USER)
             .banned(false)
             .build();

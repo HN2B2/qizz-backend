@@ -1,6 +1,6 @@
 package tech.qizz.core.user;
 
-import tech.qizz.core.user.constant.UserRole;
+import tech.qizz.core.entity.constant.UserRole;
 import tech.qizz.core.user.dto.CreateUserRequest;
 import tech.qizz.core.user.dto.GetAllUserResponse;
 import tech.qizz.core.user.dto.UserResponse;
