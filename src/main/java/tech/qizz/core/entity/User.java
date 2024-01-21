@@ -18,6 +18,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -26,7 +27,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import tech.qizz.core.user.constant.UserRole;
+import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import tech.qizz.core.entity.constant.UserRole;
 
 @Entity
 @Table(name = "users")
@@ -35,7 +40,8 @@ import tech.qizz.core.user.constant.UserRole;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+@ToString
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,10 +52,10 @@ public class User {
     private String displayName;
 
     @Lob
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     @Column(name = "password", nullable = false)
@@ -121,4 +127,43 @@ public class User {
 
     @ManyToMany(mappedBy = "upVoteUsers", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<QuizBank> intermediateUpvotedQuizBanks;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    public String getObjectUsername() {
+        return username;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !banned;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

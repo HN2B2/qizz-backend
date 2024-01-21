@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,14 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import tech.qizz.core.entity.constant.UserRole;
 import tech.qizz.core.exception.BadRequestException;
-import tech.qizz.core.user.constant.UserRole;
 import tech.qizz.core.user.dto.CreateUserRequest;
 import tech.qizz.core.user.dto.GetAllUserResponse;
 import tech.qizz.core.user.dto.UserResponse;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 @CrossOrigin
 @RequiredArgsConstructor
 public class UserController {
@@ -30,6 +31,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<GetAllUserResponse> getAllUser(
         @RequestParam(required = false, defaultValue = "1") Integer page,
         @RequestParam(required = false, defaultValue = "10") Integer limit,
@@ -59,8 +61,8 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest body,
         BindingResult result) {
-        if (result.hasErrors()) {
-            throw new BadRequestException("Invalid request body");
+        if (result.hasErrors() || body == null) {
+            throw new BadRequestException("Invalid request");
         }
         UserResponse user = userService.createUser(body);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
@@ -68,7 +70,10 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable Long id,
-        @Valid @RequestBody CreateUserRequest body) {
+        @Valid @RequestBody CreateUserRequest body, BindingResult result) {
+        if (result.hasErrors() || body == null) {
+            throw new BadRequestException("Invalid request");
+        }
         UserResponse user = userService.updateUser(id, body);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -78,4 +83,6 @@ public class UserController {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
 }

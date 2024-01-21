@@ -1,4 +1,4 @@
-package tech.qizz.core.user.dto;
+package tech.qizz.core.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
@@ -10,15 +10,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateUserRequest {
+public class RegisterRequest {
 
-    @Email
     @NotBlank
+    @JsonProperty("username")
+    private String username;
+
+    @NotBlank
+    @Email
     @JsonProperty("email")
     private String email;
 
@@ -26,8 +31,4 @@ public class CreateUserRequest {
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{6,255}$")
     @JsonProperty("password")
     private String password;
-
-    @NotBlank
-    @JsonProperty("username")
-    private String username;
 }
