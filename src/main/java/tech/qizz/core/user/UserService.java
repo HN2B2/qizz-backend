@@ -1,28 +1,12 @@
 package tech.qizz.core.user;
 
-import tech.qizz.core.entity.constant.UserRole;
-import tech.qizz.core.user.dto.CreateUserRequest;
-import tech.qizz.core.user.dto.GetAllUserResponse;
-import tech.qizz.core.user.dto.UserResponse;
+import tech.qizz.core.user.dto.ChangePasswordRequest;
+import tech.qizz.core.user.dto.ProfileResponse;
+import tech.qizz.core.user.dto.UpdateProfileRequest;
 
 public interface UserService {
 
-    public GetAllUserResponse getAllUser(
-        Integer page,
-        Integer limit,
-        String keyword,
-        UserRole role,
-        Boolean banned,
-        String order,
-        String sort
-    );
+    ProfileResponse updateProfile(Long id, UpdateProfileRequest body);
 
-    public UserResponse getUserById(Long id);
-
-    public UserResponse createUser(CreateUserRequest body);
-
-    public UserResponse updateUser(Long id, CreateUserRequest body);
-
-    public void deleteUser(Long id);
-
+    ProfileResponse changePassword(Long id, ChangePasswordRequest body);
 }
