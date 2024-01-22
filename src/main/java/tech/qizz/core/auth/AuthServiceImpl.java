@@ -45,10 +45,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponse register(RegisterRequest body) {
-        Optional<User> userByEmail = userRepository.findByEmail(body.getEmail());
-        Optional<User> userByUsername = userRepository.findByUsername(body.getUsername());
-
-        if (userByEmail.isPresent() || userByUsername.isPresent()) {
+        boolean exists = userRepository.existsByUsernameOrEmail(body.getUsername(),
+            body.getEmail());
+        if (exists) {
             throw new ConflictException("User already exists");
         }
         User user = User.builder()
