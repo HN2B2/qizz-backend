@@ -23,17 +23,4 @@ public class BankRequest {
     private Boolean quizPublicity;
     private Boolean publicEditable;
     private Boolean draft;
-
-    public QuizBank to(UserResponse user) {
-
-        return QuizBank.builder()
-                .name(getName())
-                .description(getDescription())
-                .featuresImage(getFeaturesImage())
-                .quizPublicity(getQuizPublicity())
-                .publicEditable(getPublicEditable())
-                .draft(getDraft())
-                .createdBy(UserResponse.of(user))
-                .build();
-    }
 }

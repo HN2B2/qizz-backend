@@ -54,7 +54,7 @@ public class QuizBank {
     @Column(name = "public_editable")
     private Boolean publicEditable;
 
-    @Column(name="draft")
+    @Column(name="draft", columnDefinition = "bit")
     private Boolean draft;
 
     @JsonIgnore

@@ -40,9 +40,9 @@ public class BankResponse {
                 .publicEditable(bank.getPublicEditable())
                 .subCategories(bank.getSubCategories())
                 .draft(bank.getDraft())
-                .totalQuestions(bank.getQuestions().size())
+                .totalQuestions((bank.getQuestions()==null)?0:bank.getQuestions().size())
                 .createdBy(bank.getCreatedBy())
-                .totalUpVotes(bank.getUpVoteUsers().size())
+                .totalUpVotes((bank.getUpVoteUsers()==null)?0:bank.getUpVoteUsers().size())
                 .build();
     }
 

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tech.qizz.core.annotation.RequestUser;
 import tech.qizz.core.bank.dto.BankRequest;
 import tech.qizz.core.bank.dto.BankResponse;
 import tech.qizz.core.entity.QuizBank;
@@ -26,9 +27,10 @@ public class BankController {
     }
 
     @PostMapping()
-    public ResponseEntity<BankRequest> saveBankRequest(@RequestBody BankRequest bank) {
-        UserResponse user = userService.getUserById(1L);
-        QuizBank savedBank = bankService.saveBank(bank.to());
+    public ResponseEntity<BankResponse> saveBankRequest(@RequestBody BankRequest bank, @RequestUser User user) {
+
+        BankResponse savedBank = bankService.saveBank(bank, user);
+        return new ResponseEntity<>(savedBank, HttpStatus.CREATED);
     }
 
 }

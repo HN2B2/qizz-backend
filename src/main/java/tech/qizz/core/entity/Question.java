@@ -71,8 +71,8 @@ public class Question {
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifiedAt;
 
-    @Column(name = "index")
-    private Integer index;
+    @Column(name = "questionIndex", nullable = true)
+    private Integer questionIndex;
 
     @PrePersist
     protected void onCreate() {
