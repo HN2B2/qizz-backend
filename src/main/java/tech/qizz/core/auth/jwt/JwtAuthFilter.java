@@ -2,6 +2,7 @@ package tech.qizz.core.auth.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,14 +30,24 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         @NonNull HttpServletResponse response,
         @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        String authHeader = request.getHeader("Authorization");
-        String jwt;
+//        String authHeader = request.getHeader("Authorization");
+        String jwt = null;
         String userEmail;
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+//        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
+        Cookie[] cookie = request.getCookies();
+        if (cookie == null) {
             filterChain.doFilter(request, response);
             return;
+        } else {
+            for (Cookie c : cookie) {
+                if (c.getName().equals("token")) {
+                    jwt = c.getValue();
+                }
+            }
         }
-        jwt = authHeader.substring(7);
         userEmail = jwtService.extractUsername(jwt);
         if (userEmail != null
             && SecurityContextHolder.getContext().getAuthentication() == null) {

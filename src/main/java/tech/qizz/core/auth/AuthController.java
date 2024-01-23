@@ -1,5 +1,6 @@
 package tech.qizz.core.auth;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,21 +25,27 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest body,
-        BindingResult result) {
+    public ResponseEntity<AuthResponse> login(
+        @Valid @RequestBody LoginRequest body,
+        BindingResult result,
+        HttpServletResponse response
+    ) {
         if (result.hasErrors()) {
             throw new BadRequestException("Invalid request");
         }
-        return new ResponseEntity<>(authService.login(body), HttpStatus.OK);
+        return new ResponseEntity<>(authService.login(body, response), HttpStatus.OK);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest body,
-        BindingResult result) {
+    public ResponseEntity<AuthResponse> register(
+        @Valid @RequestBody RegisterRequest body,
+        BindingResult result,
+        HttpServletResponse response
+    ) {
         if (result.hasErrors() || body == null) {
             throw new BadRequestException("Invalid request");
         }
-        return new ResponseEntity<>(authService.register(body), HttpStatus.CREATED);
+        return new ResponseEntity<>(authService.register(body, response), HttpStatus.CREATED);
     }
 
 }

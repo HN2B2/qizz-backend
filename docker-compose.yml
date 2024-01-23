@@ -26,7 +26,8 @@ services:
         "spring.datasource.username": "$MYSQLDB_USER",
         "spring.datasource.password": "$MYSQLDB_ROOT_PASSWORD",
         "spring.jpa.hibernate.ddl-auto": "update",
-        "jwt.expiration": "604800000"
+        "jwt.expiration": "604800000",
+        "client.url": "$CLIENT_URL"
       }'
     volumes:
       - .m2:/root/.m2
