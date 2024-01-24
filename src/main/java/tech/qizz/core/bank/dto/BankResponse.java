@@ -4,6 +4,7 @@ import lombok.*;
 import tech.qizz.core.entity.QuizBank;
 import tech.qizz.core.entity.SubCategory;
 import tech.qizz.core.entity.User;
+import tech.qizz.core.user.dto.UserResponse;
 
 import java.util.Date;
 import java.util.Set;
@@ -25,7 +26,8 @@ public class BankResponse {
     private Set<SubCategory> subCategories;
     private Boolean draft;
     private Integer totalQuestions;
-    private User createdBy;
+    private UserResponse createdBy;
+    private UserResponse modifiedBy;
     private Integer totalUpVotes;
 
     public static BankResponse of (QuizBank bank) {
@@ -41,7 +43,8 @@ public class BankResponse {
                 .subCategories(bank.getSubCategories())
                 .draft(bank.getDraft())
                 .totalQuestions((bank.getQuestions()==null)?0:bank.getQuestions().size())
-                .createdBy(bank.getCreatedBy())
+                .createdBy(UserResponse.of(bank.getCreatedBy()))
+                .modifiedBy(UserResponse.of(bank.getModifiedBy()))
                 .totalUpVotes((bank.getUpVoteUsers()==null)?0:bank.getUpVoteUsers().size())
                 .build();
     }

@@ -22,11 +22,11 @@ public class QuizBank {
     private String name;
 
     @Lob
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = true)
     private String description;
 
     @Lob
-    @Column(name = "features_image", nullable = false)
+    @Column(name = "features_image", nullable = true)
     private String featuresImage;
 
     @Column(name = "created_at")

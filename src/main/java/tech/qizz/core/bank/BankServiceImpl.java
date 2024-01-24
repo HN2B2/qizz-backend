@@ -2,7 +2,7 @@ package tech.qizz.core.bank;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import tech.qizz.core.bank.dto.BankRequest;
+import tech.qizz.core.bank.dto.CreateBankRequest;
 import tech.qizz.core.bank.dto.BankResponse;
 import tech.qizz.core.entity.QuizBank;
 import tech.qizz.core.entity.User;
@@ -22,7 +22,7 @@ public class BankServiceImpl implements BankService{
         return bank.map(BankResponse::of).orElseThrow(() -> new NotFoundException("Bank not found"));
     }
 
-    public BankResponse saveBank(BankRequest bank, User user) {
+    public BankResponse saveBank(CreateBankRequest bank, User user) {
             QuizBank savedBank = QuizBank.builder()
                     .name(bank.getName())
                     .description(bank.getDescription())
