@@ -8,6 +8,7 @@ import tech.qizz.core.user.dto.UserResponse;
 
 import java.util.Date;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Getter
@@ -28,6 +29,7 @@ public class BankResponse {
     private Integer totalQuestions;
     private UserResponse createdBy;
     private UserResponse modifiedBy;
+    private Set<UserResponse> manageUsers;
     private Integer totalUpVotes;
 
     public static BankResponse of (QuizBank bank) {
@@ -45,6 +47,7 @@ public class BankResponse {
                 .totalQuestions((bank.getQuestions()==null)?0:bank.getQuestions().size())
                 .createdBy(UserResponse.of(bank.getCreatedBy()))
                 .modifiedBy(UserResponse.of(bank.getModifiedBy()))
+                .manageUsers(bank.getManageUsers().stream().map(UserResponse::of).collect(Collectors.toSet()))
                 .totalUpVotes((bank.getUpVoteUsers()==null)?0:bank.getUpVoteUsers().size())
                 .build();
     }

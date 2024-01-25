@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,4 +25,19 @@ public class CreateBankRequest {
     private Boolean publicEditable;
     @JsonProperty("draft")
     private Boolean draft;
+    @JsonProperty("manageUsers")
+    private Set<ManageUser> manageUsers;
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ManageUser {
+        @JsonProperty("email")
+        private String email;
+
+        @JsonProperty("editable")
+        private boolean editable;
+    }
 }
