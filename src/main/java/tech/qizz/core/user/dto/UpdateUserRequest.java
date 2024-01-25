@@ -15,5 +15,8 @@ import lombok.Setter;
 public class UpdateUserRequest {
 
     @NotNull
+    private String role;
+
+    @NotNull
     private Boolean banned;
 }
