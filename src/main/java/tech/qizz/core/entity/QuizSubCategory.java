@@ -1,15 +1,7 @@
 package tech.qizz.core.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
+
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,6 +29,13 @@ public class QuizSubCategory {
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifiedAt;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "sub_category_id",referencedColumnName = "sub_category_id")
+    private SubCategory subCategory;
+
+    @ManyToOne(optional = false)
+    @JoinColumn (name = "bank_id",referencedColumnName = "quiz_bank_id")
+    private QuizBank quizBank;
     @PrePersist
     protected void onCreate() {
         createdAt = new Date();
