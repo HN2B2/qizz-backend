@@ -20,6 +20,7 @@ public class RegisterRequest {
 
     @NotBlank
     @JsonProperty("username")
+    @Pattern(regexp = "^[a-zA-Z0-9]+$")
     private String username;
 
     @NotBlank

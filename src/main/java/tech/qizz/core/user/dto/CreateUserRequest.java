@@ -29,5 +29,6 @@ public class CreateUserRequest {
 
     @NotBlank
     @JsonProperty("username")
+    @Pattern(regexp = "^[a-zA-Z0-9]+$")
     private String username;
 }

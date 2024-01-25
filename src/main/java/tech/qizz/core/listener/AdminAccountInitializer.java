@@ -21,14 +21,21 @@ public class AdminAccountInitializer implements ApplicationListener<ContextRefre
     private final Helper helper;
 
     private String randomPassword() {
-        String passwordChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()";
+        String lowerCase = "abcdefghijklmnopqrstuvwxyz";
+        String upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String numbers = "1234567890";
+        String specialChars = "!@#$%^&*()";
         StringBuilder password = new StringBuilder();
         Random random = new Random();
 
-        for (int i = 0; i < 10; i++) {
-            int index = random.nextInt(passwordChars.length());
-            password.append(passwordChars.charAt(index));
+        for (int i = 0; i < 4; i++) {
+            password.append(lowerCase.charAt(random.nextInt(lowerCase.length())));
         }
+        for (int i = 0; i < 2; i++) {
+            password.append(upperCase.charAt(random.nextInt(upperCase.length())));
+        }
+        password.append(numbers.charAt(random.nextInt(numbers.length())));
+        password.append(specialChars.charAt(random.nextInt(specialChars.length())));
 
         return password.toString();
     }
@@ -39,14 +46,15 @@ public class AdminAccountInitializer implements ApplicationListener<ContextRefre
 
         if (!adminExists) {
             String adminUsername = "admin";
-            String adminPassword = passwordEncoder.encode(randomPassword());
+            String adminPassword = randomPassword();
             String displayName = helper.generateUsername();
             User admin = User.builder()
                 .email(adminUsername + "@qizz.tech")
                 .username(adminUsername)
-                .password(adminPassword)
+                .password(passwordEncoder.encode(adminPassword))
                 .displayName(displayName)
                 .banned(false)
+                .enabled(true)
                 .role(UserRole.ADMIN)
                 .build();
             userRepository.save(admin);
