@@ -73,19 +73,24 @@ public class User implements UserDetails {
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifiedAt;
 
+    @Column(name = "banned")
+    private Boolean banned;
+
+    @Column(name = "enabled")
+    private Boolean enabled;
+
     @PrePersist
     protected void onCreate() {
         createdAt = new Date();
         modifiedAt = createdAt;
+        banned = false;
+        enabled = false;
     }
 
     @PreUpdate
     protected void onUpdate() {
         modifiedAt = new Date();
     }
-
-    @Column(name = "banned")
-    private Boolean banned;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
@@ -167,6 +172,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

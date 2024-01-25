@@ -90,6 +90,7 @@ public class AuthServiceImpl implements AuthService {
         User savedUser = userRepository.save(user);
         String token = jwtService.generateToken(savedUser);
         setJwtToCookie(response, token);
+        setUserDataToCookie(response, UserResponse.of(savedUser));
         return AuthResponse
             .builder()
             .user(UserResponse.of(savedUser))
