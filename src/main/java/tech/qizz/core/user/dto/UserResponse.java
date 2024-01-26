@@ -26,6 +26,8 @@ public class UserResponse {
     private String displayName;
     @JsonProperty("role")
     private UserRole role;
+    @JsonProperty("banned")
+    private Boolean banned;
 
     public static UserResponse of(User user) {
         return UserResponse.builder()
@@ -34,6 +36,7 @@ public class UserResponse {
             .email(user.getEmail())
             .displayName(user.getDisplayName())
             .role(user.getRole())
+            .banned(user.getBanned())
             .build();
     }
 }
