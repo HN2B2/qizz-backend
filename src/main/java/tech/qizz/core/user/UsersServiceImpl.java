@@ -13,10 +13,7 @@ import tech.qizz.core.entity.User;
 import tech.qizz.core.entity.constant.UserRole;
 import tech.qizz.core.exception.ConflictException;
 import tech.qizz.core.exception.NotFoundException;
-import tech.qizz.core.user.dto.CreateUserRequest;
-import tech.qizz.core.user.dto.GetAllUserResponse;
-import tech.qizz.core.user.dto.UpdateUserRequest;
-import tech.qizz.core.user.dto.UserResponse;
+import tech.qizz.core.user.dto.*;
 import tech.qizz.core.util.Helper;
 
 @Service
@@ -40,6 +37,7 @@ public class UsersServiceImpl implements UsersService {
     ) {
         Sort sortType = sort.equalsIgnoreCase("asc") ? Sort.by(order) : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page - 1, limit, sortType);
+
         Page<User> users = userRepository.findUsersByKeywordAndRoleAndBanned(
             keyword,
             role,
@@ -50,14 +48,14 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public UserResponse getUserById(Long id) {
+    public UsersResponse getUserById(Long id) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("User not found"));
-        return UserResponse.of(user);
+        return UsersResponse.of(user);
     }
 
     @Override
-    public UserResponse createUser(CreateUserRequest body) {
+    public UsersResponse createUser(CreateUserRequest body) {
         boolean exists = userRepository.existsByUsernameOrEmail(body.getUsername(),
             body.getEmail());
         if (exists) {
@@ -71,15 +69,15 @@ public class UsersServiceImpl implements UsersService {
             .role(UserRole.USER)
             .banned(false)
             .build();
-        return UserResponse.of(userRepository.save(user));
+        return UsersResponse.of(userRepository.save(user));
     }
 
     @Override
-    public UserResponse updateUser(Long id, UpdateUserRequest body) {
+    public UsersResponse updateUser(Long id, UpdateUserRequest body) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("User not found"));
         modelMapper.map(body, user);
-        return UserResponse.of(userRepository.save(user));
+        return UsersResponse.of(userRepository.save(user));
     }
 
     @Override

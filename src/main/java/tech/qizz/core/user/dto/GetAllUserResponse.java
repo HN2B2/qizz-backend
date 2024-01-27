@@ -14,13 +14,13 @@ import tech.qizz.core.entity.User;
 @AllArgsConstructor
 public class GetAllUserResponse {
     @JsonProperty("data")
-    private List<UserResponse> data;
+    private List<UsersResponse> data;
     @JsonProperty("total")
     private Long total;
 
     public static GetAllUserResponse of (Page<User> users) {
         return GetAllUserResponse.builder()
-                .data(users.stream().map(UserResponse::of).toList())
+                .data(users.stream().map(UsersResponse::of).toList())
                 .total(users.getTotalElements())
                 .build();
     }

@@ -1,10 +1,7 @@
 package tech.qizz.core.user;
 
 import tech.qizz.core.entity.constant.UserRole;
-import tech.qizz.core.user.dto.CreateUserRequest;
-import tech.qizz.core.user.dto.GetAllUserResponse;
-import tech.qizz.core.user.dto.UpdateUserRequest;
-import tech.qizz.core.user.dto.UserResponse;
+import tech.qizz.core.user.dto.*;
 
 public interface UsersService {
 
@@ -18,11 +15,11 @@ public interface UsersService {
         String sort
     );
 
-    public UserResponse getUserById(Long id);
+    public UsersResponse getUserById(Long id);
 
-    public UserResponse createUser(CreateUserRequest body);
+    public UsersResponse createUser(CreateUserRequest body);
 
-    public UserResponse updateUser(Long id, UpdateUserRequest body);
+    public UsersResponse updateUser(Long id, UpdateUserRequest body);
 
     public void deleteUser(Long id);
 }
