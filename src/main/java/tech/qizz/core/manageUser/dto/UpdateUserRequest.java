@@ -1,4 +1,4 @@
-package tech.qizz.core.user.dto;
+package tech.qizz.core.manageUser.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

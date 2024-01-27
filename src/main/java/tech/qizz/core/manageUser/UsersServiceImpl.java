@@ -1,4 +1,4 @@
-package tech.qizz.core.user;
+package tech.qizz.core.manageUser;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,10 @@ import tech.qizz.core.entity.User;
 import tech.qizz.core.entity.constant.UserRole;
 import tech.qizz.core.exception.ConflictException;
 import tech.qizz.core.exception.NotFoundException;
-import tech.qizz.core.user.dto.*;
+import tech.qizz.core.manageUser.dto.CreateUserRequest;
+import tech.qizz.core.manageUser.dto.GetAllUserResponse;
+import tech.qizz.core.manageUser.dto.UpdateUserRequest;
+import tech.qizz.core.manageUser.dto.UsersResponse;
 import tech.qizz.core.util.Helper;
 
 @Service

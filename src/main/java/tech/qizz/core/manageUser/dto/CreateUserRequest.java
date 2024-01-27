@@ -1,4 +1,4 @@
-package tech.qizz.core.user.dto;
+package tech.qizz.core.manageUser.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;

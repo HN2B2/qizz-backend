@@ -20,7 +20,7 @@ import tech.qizz.core.entity.User;
 import tech.qizz.core.entity.constant.UserRole;
 import tech.qizz.core.exception.ConflictException;
 import tech.qizz.core.exception.NotFoundException;
-import tech.qizz.core.user.UserRepository;
+import tech.qizz.core.manageUser.UserRepository;
 import tech.qizz.core.user.dto.UserResponse;
 import tech.qizz.core.util.Helper;
 
@@ -85,6 +85,7 @@ public class AuthServiceImpl implements AuthService {
             .username(body.getUsername())
             .password(passwordEncoder.encode(body.getPassword()))
             .role(UserRole.USER)
+            .enabled(true)
             .banned(false)
             .build();
         User savedUser = userRepository.save(user);

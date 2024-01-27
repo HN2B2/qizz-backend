@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.exception.BadRequestException;
 import tech.qizz.core.exception.NotFoundException;
+import tech.qizz.core.manageUser.UserRepository;
 import tech.qizz.core.user.dto.ChangePasswordRequest;
 import tech.qizz.core.user.dto.ProfileResponse;
 import tech.qizz.core.user.dto.UpdateProfileRequest;

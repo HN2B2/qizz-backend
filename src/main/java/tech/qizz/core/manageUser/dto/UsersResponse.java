@@ -1,7 +1,11 @@
-package tech.qizz.core.user.dto;
+package tech.qizz.core.manageUser.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.entity.constant.UserRole;
 

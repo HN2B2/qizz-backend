@@ -1,4 +1,4 @@
-package tech.qizz.core.user;
+package tech.qizz.core.manageUser;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -6,10 +6,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import tech.qizz.core.entity.constant.UserRole;
 import tech.qizz.core.exception.BadRequestException;
-import tech.qizz.core.user.dto.*;
+import tech.qizz.core.manageUser.dto.CreateUserRequest;
+import tech.qizz.core.manageUser.dto.GetAllUserResponse;
+import tech.qizz.core.manageUser.dto.UpdateUserRequest;
+import tech.qizz.core.manageUser.dto.UsersResponse;
 
 @RestController
 @RequestMapping("/users")
@@ -30,7 +41,7 @@ public class UsersController {
         @RequestParam(required = false, defaultValue = "id") String order,
         @RequestParam(required = false, defaultValue = "desc") String sort
     ) {
-        UserRole userRole = UserRole.validateUserRole(role);
+        UserRole userRole = role == null ? null : UserRole.validateUserRole(role);
         GetAllUserResponse user = usersService.getAllUser(
             page,
             limit,
@@ -71,7 +82,6 @@ public class UsersController {
         UsersResponse user = usersService.updateUser(id, body);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
-
 
 //    @DeleteMapping("/{id}")
 //    @PreAuthorize("hasAnyAuthority('ADMIN')")
