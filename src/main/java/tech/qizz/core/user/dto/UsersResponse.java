@@ -1,11 +1,7 @@
 package tech.qizz.core.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.entity.constant.UserRole;
 
@@ -14,7 +10,7 @@ import tech.qizz.core.entity.constant.UserRole;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse {
+public class UsersResponse {
 
     @JsonProperty("id")
     private Long id;
@@ -26,14 +22,17 @@ public class UserResponse {
     private String displayName;
     @JsonProperty("role")
     private UserRole role;
+    @JsonProperty("banned")
+    private Boolean banned;
 
-    public static UserResponse of(User user) {
-        return UserResponse.builder()
+    public static UsersResponse of(User user) {
+        return UsersResponse.builder()
             .id(user.getUserId())
             .username(user.getObjectUsername())
             .email(user.getEmail())
             .displayName(user.getDisplayName())
             .role(user.getRole())
+            .banned(user.getBanned())
             .build();
     }
 }

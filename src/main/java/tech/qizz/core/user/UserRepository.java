@@ -14,11 +14,11 @@ import tech.qizz.core.entity.constant.UserRole;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE " +
-        "u.username LIKE CONCAT('%', :keyword, '%') OR " +
-        "u.email LIKE CONCAT('%', :keyword, '%') OR " +
-        "u.displayName LIKE CONCAT('%', :keyword, '%') AND " +
-        "u.role = :role AND " +
-        "(:banned IS NULL OR u.banned = :banned)"
+            "(u.username LIKE CONCAT('%', :keyword, '%') OR " +
+            "u.email LIKE CONCAT('%', :keyword, '%') OR " +
+            "u.displayName LIKE CONCAT('%', :keyword, '%')) AND " +
+            "(:role IS NULL OR u.role = :role) AND " +
+            "(:banned IS NULL OR u.banned = :banned)"
     )
     Page<User> findUsersByKeywordAndRoleAndBanned(
         @Param("keyword") String keyword,
