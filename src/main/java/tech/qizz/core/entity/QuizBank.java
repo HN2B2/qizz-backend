@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
 @Entity
 @Table(name = "quiz_banks")
 @Getter
@@ -22,11 +26,11 @@ public class QuizBank {
     private String name;
 
     @Lob
-    @Column(name = "description", nullable = true)
+    @Column(name = "description")
     private String description;
 
     @Lob
-    @Column(name = "features_image", nullable = true)
+    @Column(name = "features_image")
     private String featuresImage;
 
     @Column(name = "created_at")
