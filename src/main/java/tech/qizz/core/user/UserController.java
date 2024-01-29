@@ -15,7 +15,7 @@ import tech.qizz.core.annotation.RequestUser;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.user.dto.ChangePasswordRequest;
 import tech.qizz.core.user.dto.ProfileResponse;
-import tech.qizz.core.user.dto.UpdateProfileRequest;
+import tech.qizz.core.user.dto.UpsertProfileRequest;
 
 @RestController
 @RequestMapping("/user")
@@ -35,7 +35,7 @@ public class UserController {
     @PreAuthorize("hasAnyAuthority('USER', 'STAFF', 'ADMIN')")
     public ResponseEntity<ProfileResponse> updateUser(
         @RequestUser User requestUser,
-        @Valid @RequestBody UpdateProfileRequest body
+        @Valid @RequestBody UpsertProfileRequest body
     ) {
         return new ResponseEntity<>(userService.updateProfile(requestUser.getUserId(), body),
             HttpStatus.OK);
