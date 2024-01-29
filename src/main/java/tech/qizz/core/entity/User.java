@@ -84,7 +84,7 @@ public class User implements UserDetails {
         createdAt = new Date();
         modifiedAt = createdAt;
         banned = false;
-        enabled = false;
+        enabled = true;
     }
 
     @PreUpdate
@@ -96,8 +96,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<FeedBack> feedbacks;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<UserMetadata> userMetadatas;
 
     @JsonIgnore
@@ -124,10 +123,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<QuizJoinedUser> quizJoinedUsers;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<FavoriteBank> favoriteBanks;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ManageBank> manageBanks;
 
     @JsonIgnore
