@@ -3,10 +3,8 @@ package tech.qizz.core.entity;
 import jakarta.persistence.*;
 
 import java.util.Date;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import lombok.*;
 
 @Entity
 @Table(name = "manage_banks")
@@ -14,6 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ManageBank {
 
     @Id
