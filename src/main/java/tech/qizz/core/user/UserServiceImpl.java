@@ -2,6 +2,7 @@ package tech.qizz.core.user;
 
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.entity.UserMetadata;
@@ -18,6 +19,7 @@ import tech.qizz.core.user.dto.UpsertProfileRequest;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     private static final Map<String, String> KEY_REGEX_MAP = Map.of(
         "avatarUrl", "^https?://.+\\.(png|jpg|jpeg|gif)$",
@@ -76,7 +78,7 @@ public class UserServiceImpl implements UserService {
     public ProfileResponse changePassword(Long id, ChangePasswordRequest body) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("User not found"));
-        if (!user.getPassword().equals(body.getOldPassword())) {
+        if (!user.getPassword().equals(passwordEncoder.encode(body.getOldPassword()))) {
             throw new BadRequestException("Wrong password");
         }
         user.setPassword(body.getNewPassword());
