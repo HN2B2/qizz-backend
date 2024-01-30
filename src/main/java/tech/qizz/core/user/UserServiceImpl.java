@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
         if (!passwordEncoder.matches(body.getOldPassword(), user.getPassword())) {
             throw new BadRequestException("Wrong password");
         }
-        user.setPassword(body.getNewPassword());
+        user.setPassword(passwordEncoder.encode(body.getNewPassword()));
         return ProfileResponse.of(userRepository.save(user));
     }
 }
