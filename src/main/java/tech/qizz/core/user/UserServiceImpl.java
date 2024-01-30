@@ -78,7 +78,6 @@ public class UserServiceImpl implements UserService {
     public ProfileResponse changePassword(Long id, ChangePasswordRequest body) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("User not found"));
-
         if (!passwordEncoder.matches(body.getOldPassword(), user.getPassword())) {
             throw new BadRequestException("Wrong password");
         }
