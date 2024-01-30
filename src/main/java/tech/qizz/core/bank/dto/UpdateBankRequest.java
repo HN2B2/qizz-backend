@@ -6,14 +6,13 @@ import lombok.*;
 import tech.qizz.core.manageBank.dto.CreateManageBankRequest;
 
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreateBankRequest {
+public class UpdateBankRequest {
     @NotBlank
     @JsonProperty("name")
     private String name;
@@ -29,6 +28,6 @@ public class CreateBankRequest {
     private Boolean draft;
     @JsonProperty("manageBanks")
     private List<CreateManageBankRequest> manageBanks;
-//còn list subcategories nữa
 
+    //còn list subcategories nữa
 }

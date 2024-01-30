@@ -1,12 +1,15 @@
 package tech.qizz.core.bank.dto;
 
 import lombok.*;
+import tech.qizz.core.entity.ManageBank;
 import tech.qizz.core.entity.QuizBank;
 import tech.qizz.core.entity.SubCategory;
 import tech.qizz.core.entity.User;
+import tech.qizz.core.manageBank.dto.ManageBankResponse;
 import tech.qizz.core.user.dto.UserResponse;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,12 +27,12 @@ public class BankResponse {
     private Date modifiedAt;
     private Boolean quizPublicity;
     private Boolean publicEditable;
-    private Set<SubCategory> subCategories;
+    private List<SubCategory> subCategories;
     private Boolean draft;
     private Integer totalQuestions;
     private UserResponse createdBy;
     private UserResponse modifiedBy;
-    private Set<UserResponse> manageUsers;
+    private List<ManageBankResponse> manageBanks;
     private Integer totalUpVotes;
 
     public static BankResponse of (QuizBank bank) {
@@ -42,12 +45,12 @@ public class BankResponse {
                 .modifiedAt(bank.getModifiedAt())
                 .quizPublicity(bank.getQuizPublicity())
                 .publicEditable(bank.getPublicEditable())
-                .subCategories(bank.getSubCategories())
+                .subCategories(null)
                 .draft(bank.getDraft())
                 .totalQuestions((bank.getQuestions()==null)?0:bank.getQuestions().size())
                 .createdBy(UserResponse.of(bank.getCreatedBy()))
                 .modifiedBy(UserResponse.of(bank.getModifiedBy()))
-                .manageUsers(bank.getManageUsers().stream().map(UserResponse::of).collect(Collectors.toSet()))
+                .manageBanks(bank.getManageBanks().stream().map(ManageBankResponse::of).collect(Collectors.toList()))
                 .totalUpVotes((bank.getUpVoteUsers()==null)?0:bank.getUpVoteUsers().size())
                 .build();
     }
