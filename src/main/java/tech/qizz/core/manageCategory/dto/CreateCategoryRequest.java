@@ -21,8 +21,6 @@ public class CreateCategoryRequest {
     @Pattern(regexp = "^[a-zA-Z0-9\\s-]{1,255}$")
     private String name;
 
-    @NotBlank
     @JsonProperty("description")
-    @Pattern(regexp = "^[a-zA-Z0-9\\s-.,!?]{0,255}$")
     private String description;
 }

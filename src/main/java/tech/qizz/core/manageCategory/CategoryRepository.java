@@ -11,8 +11,7 @@ import tech.qizz.core.entity.Category;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    @Query("SELECT c FROM Category c " +
-        "JOIN FETCH c.subCategories sc WHERE " +
+    @Query("SELECT c FROM Category c WHERE " +
         "(c.name LIKE CONCAT('%', :keyword, '%') OR " +
         "c.description LIKE CONCAT('%', :keyword, '%'))"
     )

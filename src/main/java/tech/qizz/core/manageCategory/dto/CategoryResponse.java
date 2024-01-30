@@ -2,6 +2,7 @@ package tech.qizz.core.manageCategory.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +21,9 @@ public class CategoryResponse {
     @JsonProperty("id")
     private Long id;
 
+    @JsonProperty("createdAt")
+    private String createdAt;
+
     @JsonProperty("name")
     private String name;
 
@@ -32,10 +36,16 @@ public class CategoryResponse {
     public static CategoryResponse of(Category category) {
         return CategoryResponse.builder()
             .id(category.getCategoryId())
+            .createdAt(category.getCreatedAt().toString())
             .name(category.getName())
             .description(category.getDescription())
             .subCategories(
-                category.getSubCategories().stream().map(SubCategoryResponse::of).toList())
+                Optional
+                    .ofNullable(category.getSubCategories())
+                    .orElseGet(List::of)
+                    .stream()
+                    .map(SubCategoryResponse::of)
+                    .toList())
             .build();
     }
 }
