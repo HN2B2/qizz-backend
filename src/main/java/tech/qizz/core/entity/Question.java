@@ -18,10 +18,8 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.util.Date;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import lombok.*;
 
 @Entity
 @Table(name = "questions")
@@ -29,6 +27,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Question {
 
     @Id
@@ -44,15 +43,14 @@ public class Question {
     @Column(name = "point", nullable = false)
     private long point;
 
-    @Temporal(TemporalType.TIME)
     @Column(name = "duration", nullable = false)
-    private Date duration;
+    private Integer duration;
 
     @Column(name = "type", nullable = false)
     private String type;
 
     @Lob
-    @Column(name = "answers_metadata", nullable = false)
+    @Column(name = "answers_metadata")
     private String answersMetadata;
 
     @Lob
@@ -60,7 +58,7 @@ public class Question {
     private String correctAnswersMetadata;
 
     @Lob
-    @Column(name = "explain_answer", nullable = false)
+    @Column(name = "explain_answer")
     private String explainAnswer;
 
     @Column(name = "created_at")
@@ -70,6 +68,9 @@ public class Question {
     @Column(name = "modified_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifiedAt;
+
+    @Column(name = "question_index", nullable = true)
+    private Integer questionIndex;
 
     @PrePersist
     protected void onCreate() {
