@@ -15,12 +15,16 @@ public class CorsConfig {
     @Value("${client.url}")
     private String clientUrl;
 
+    @Value("${client.url2}")
+    private String clientUrl2;
+
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOrigin(clientUrl);
+        config.addAllowedOrigin(clientUrl2);
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
