@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 .env
 local.env
+
 .m2
 
 ### STS ###
