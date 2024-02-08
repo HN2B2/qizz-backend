@@ -43,11 +43,11 @@ public class Quiz {
     private String name;
 
     @Lob
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
 
     @Lob
-    @Column(name = "featured_image", nullable = false)
+    @Column(name = "featured_image")
     private String featuredImage;
 
     @Column(name = "created_at")

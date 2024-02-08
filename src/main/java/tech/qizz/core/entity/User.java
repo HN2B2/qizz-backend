@@ -94,7 +94,7 @@ public class User implements UserDetails {
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
-    private List<FeedBack> feedbacks;
+    private List<Feedback> feedbacks;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<UserMetadata> userMetadatas;
