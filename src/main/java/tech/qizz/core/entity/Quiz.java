@@ -36,9 +36,6 @@ public class Quiz {
     @Column(name = "quiz_id")
     private long quizId;
 
-    @Column(name = "mode", nullable = false)
-    private String mode;
-
     @Column(name = "name", nullable = false)
     private String name;
 
