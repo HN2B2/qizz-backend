@@ -27,6 +27,7 @@ services:
         "spring.datasource.password": "$MYSQLDB_ROOT_PASSWORD",
         "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQLDialect",
         "spring.jpa.hibernate.ddl-auto": "update",
+        "cloudinary.url": "$CLOUDINARY_URL",
         "jwt.expiration": "604800000",
         "client.url": "$CLIENT_URL",
         "client.url2": "$CLIENT_URL2"
