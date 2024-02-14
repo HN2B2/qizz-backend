@@ -36,18 +36,15 @@ public class Quiz {
     @Column(name = "quiz_id")
     private long quizId;
 
-    @Column(name = "mode", nullable = false)
-    private String mode;
-
     @Column(name = "name", nullable = false)
     private String name;
 
     @Lob
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
 
     @Lob
-    @Column(name = "featured_image", nullable = false)
+    @Column(name = "featured_image")
     private String featuredImage;
 
     @Column(name = "created_at")
