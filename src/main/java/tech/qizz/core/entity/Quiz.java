@@ -66,17 +66,8 @@ public class Quiz {
         modifiedAt = new Date();
     }
 
-    @Column(name = "publish", nullable = false)
-    private String publish;
-
-    @Column(name = "accessed_group")
-    private Boolean accessedGroup;
-
     @Column(name = "code", nullable = false)
-    private long code;
-
-    @Column(name = "total_joined", nullable = false)
-    private long totalJoined;
+    private String code;
 
     @JsonIgnore
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)

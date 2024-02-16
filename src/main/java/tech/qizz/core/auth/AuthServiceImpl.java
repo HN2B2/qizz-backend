@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tech.qizz.core.auth.dto.AuthResponse;
+import tech.qizz.core.auth.dto.CreateGuestRequest;
 import tech.qizz.core.auth.dto.LoginRequest;
 import tech.qizz.core.auth.dto.RegisterRequest;
 import tech.qizz.core.auth.jwt.JwtService;
@@ -85,6 +86,25 @@ public class AuthServiceImpl implements AuthService {
             .username(body.getUsername())
             .password(passwordEncoder.encode(body.getPassword()))
             .role(UserRole.USER)
+            .enabled(true)
+            .banned(false)
+            .build();
+        User savedUser = userRepository.save(user);
+        String token = jwtService.generateToken(savedUser);
+        setJwtToCookie(response, token);
+        setUserDataToCookie(response, UserResponse.of(savedUser));
+        return AuthResponse
+            .builder()
+            .user(UserResponse.of(savedUser))
+            .token(token)
+            .build();
+    }
+
+    @Override
+    public AuthResponse createGuest(CreateGuestRequest body, HttpServletResponse response) {
+        User user = User.builder()
+            .displayName(body.getDisplayName())
+            .role(UserRole.GUEST)
             .enabled(true)
             .banned(false)
             .build();
