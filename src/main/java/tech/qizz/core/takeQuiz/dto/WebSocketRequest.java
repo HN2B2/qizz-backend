@@ -1,23 +1,25 @@
-package tech.qizz.core.auth.dto;
+package tech.qizz.core.takeQuiz.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import tech.qizz.core.user.dto.ProfileResponse;
 
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthResponse {
+public class WebSocketRequest<T> {
 
-    @JsonProperty("user")
-    private ProfileResponse user;
-
+    @NotNull
     @JsonProperty("token")
     private String token;
+
+    @NotNull
+    @JsonProperty("body")
+    private T data;
 }

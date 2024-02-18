@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tech.qizz.core.auth.dto.AuthResponse;
+import tech.qizz.core.auth.dto.CreateGuestRequest;
 import tech.qizz.core.auth.dto.LoginRequest;
 import tech.qizz.core.auth.dto.RegisterRequest;
 import tech.qizz.core.auth.jwt.JwtService;
@@ -21,7 +22,7 @@ import tech.qizz.core.entity.constant.UserRole;
 import tech.qizz.core.exception.ConflictException;
 import tech.qizz.core.exception.NotFoundException;
 import tech.qizz.core.manageUser.UserRepository;
-import tech.qizz.core.user.dto.UserResponse;
+import tech.qizz.core.user.dto.ProfileResponse;
 import tech.qizz.core.util.Helper;
 
 @Service
@@ -42,7 +43,7 @@ public class AuthServiceImpl implements AuthService {
         response.addCookie(cookie);
     }
 
-    private void setUserDataToCookie(HttpServletResponse response, UserResponse user) {
+    private void setUserDataToCookie(HttpServletResponse response, ProfileResponse user) {
         try {
             String userJson = URLEncoder.encode(mapper.writeValueAsString(user),
                 StandardCharsets.UTF_8);
@@ -65,9 +66,9 @@ public class AuthServiceImpl implements AuthService {
         }
         String token = jwtService.generateToken(user.get());
         setJwtToCookie(response, token);
-        setUserDataToCookie(response, UserResponse.of(user.get()));
+        setUserDataToCookie(response, ProfileResponse.of(user.get()));
         return AuthResponse.builder()
-            .user(UserResponse.of(user.get()))
+            .user(ProfileResponse.of(user.get()))
             .token(token)
             .build();
     }
@@ -91,10 +92,31 @@ public class AuthServiceImpl implements AuthService {
         User savedUser = userRepository.save(user);
         String token = jwtService.generateToken(savedUser);
         setJwtToCookie(response, token);
-        setUserDataToCookie(response, UserResponse.of(savedUser));
+        setUserDataToCookie(response, ProfileResponse.of(savedUser));
         return AuthResponse
             .builder()
-            .user(UserResponse.of(savedUser))
+            .user(ProfileResponse.of(savedUser))
+            .token(token)
+            .build();
+    }
+
+    @Override
+    public AuthResponse createGuest(CreateGuestRequest body, HttpServletResponse response) {
+        String generatedRandomEmail = passwordEncoder.encode(body.getDisplayName()) + "@qizz.tech";
+        User user = User.builder()
+            .displayName(body.getDisplayName())
+            .email(generatedRandomEmail)
+            .role(UserRole.GUEST)
+            .enabled(true)
+            .banned(false)
+            .build();
+        User savedUser = userRepository.save(user);
+        String token = jwtService.generateToken(savedUser);
+        setJwtToCookie(response, token);
+        setUserDataToCookie(response, ProfileResponse.of(savedUser));
+        return AuthResponse
+            .builder()
+            .user(ProfileResponse.of(savedUser))
             .token(token)
             .build();
     }

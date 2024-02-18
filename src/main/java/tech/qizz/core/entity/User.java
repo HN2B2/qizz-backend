@@ -52,13 +52,13 @@ public class User implements UserDetails {
     private String displayName;
 
     @Lob
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name = "username")
     private String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
     @Column(name = "role", nullable = false)
@@ -123,9 +123,11 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<QuizJoinedUser> quizJoinedUsers;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<FavoriteBank> favoriteBanks;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ManageBank> manageBanks;
 
