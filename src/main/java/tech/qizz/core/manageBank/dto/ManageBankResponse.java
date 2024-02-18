@@ -1,10 +1,13 @@
 package tech.qizz.core.manageBank.dto;
 
-import lombok.*;
-import tech.qizz.core.entity.ManageBank;
-import tech.qizz.core.user.dto.UserResponse;
-
 import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import tech.qizz.core.entity.ManageBank;
+import tech.qizz.core.user.dto.ProfileResponse;
 
 @Getter
 @Setter
@@ -12,19 +15,20 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class ManageBankResponse {
+
     private long manageBankId;
     private Date createdAt;
     private Date modifiedAt;
-    private UserResponse user;
+    private ProfileResponse user;
     private Boolean editable;
 
     public static ManageBankResponse of(ManageBank manageBank) {
         return ManageBankResponse.builder()
-                .manageBankId(manageBank.getManageBankId())
-                .createdAt(manageBank.getCreatedAt())
-                .modifiedAt(manageBank.getModifiedAt())
-                .user(UserResponse.of(manageBank.getUser()))
-                .editable(manageBank.getEditable())
-                .build();
+            .manageBankId(manageBank.getManageBankId())
+            .createdAt(manageBank.getCreatedAt())
+            .modifiedAt(manageBank.getModifiedAt())
+            .user(ProfileResponse.of(manageBank.getUser()))
+            .editable(manageBank.getEditable())
+            .build();
     }
 }
