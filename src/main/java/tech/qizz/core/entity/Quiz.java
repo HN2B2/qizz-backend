@@ -55,10 +55,18 @@ public class Quiz {
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifiedAt;
 
+    @Column(name = "started")
+    private boolean started;
+
+    @Column(name = "ended")
+    private boolean ended;
+
     @PrePersist
     protected void onCreate() {
         createdAt = new Date();
         modifiedAt = createdAt;
+        started = false;
+        ended = false;
     }
 
     @PreUpdate

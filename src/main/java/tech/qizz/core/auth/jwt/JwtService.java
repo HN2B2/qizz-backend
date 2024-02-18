@@ -13,7 +13,10 @@ import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import tech.qizz.core.entity.User;
+import tech.qizz.core.manageUser.UserRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,10 @@ public class JwtService {
 
     @Value("${jwt.expiration}")
     private long EXPIRATION;
+
+
+    private final UserRepository userRepository;
+    private final UserDetailsService userDetailsService;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -75,5 +82,14 @@ public class JwtService {
     private Key getSigninKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public User extractUser(String token) {
+        String userEmail = extractUsername(token);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+        if (!isTokenValid(token, userDetails)) {
+            return null;
+        }
+        return userRepository.findByEmail(userEmail).orElse(null);
     }
 }

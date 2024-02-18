@@ -30,6 +30,12 @@ public class QuizResponse {
     @JsonProperty("code")
     private String code;
 
+    @JsonProperty("started")
+    private boolean started;
+
+    @JsonProperty("ended")
+    private boolean ended;
+
     public static QuizResponse of(Quiz quiz) {
         return QuizResponse
             .builder()
@@ -38,6 +44,8 @@ public class QuizResponse {
             .description(quiz.getDescription())
             .featuredImage(quiz.getFeaturedImage())
             .code(quiz.getCode())
+            .started(quiz.isStarted())
+            .ended(quiz.isEnded())
             .build();
     }
 }
