@@ -27,6 +27,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
         Pageable pageable
     );
 
+    @Query("SELECT u FROM User u WHERE " +
+            "(u.email LIKE CONCAT('%', :keyword, '%'))"
+    )
+    Page<User> findUserEmailsByKeyword(
+            @Param("keyword") String keyword,
+            Pageable pageable
+    );
+
     Optional<User> findByEmail(String email);
 
     boolean existsByUsernameOrEmail(String username, String email);

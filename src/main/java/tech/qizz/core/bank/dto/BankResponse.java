@@ -11,6 +11,7 @@ import lombok.Setter;
 import tech.qizz.core.entity.QuizBank;
 import tech.qizz.core.entity.SubCategory;
 import tech.qizz.core.manageBank.dto.ManageBankResponse;
+import tech.qizz.core.manageSubCategory.dto.SubCategoryResponse;
 import tech.qizz.core.user.dto.ProfileResponse;
 
 @AllArgsConstructor
@@ -28,7 +29,7 @@ public class BankResponse {
     private Date modifiedAt;
     private Boolean quizPublicity;
     private Boolean publicEditable;
-    private List<SubCategory> subCategories;
+    private List<SubCategoryResponse> subCategories;
     private Boolean draft;
     private Integer totalQuestions;
     private ProfileResponse createdBy;
@@ -46,7 +47,7 @@ public class BankResponse {
             .modifiedAt(bank.getModifiedAt())
             .quizPublicity(bank.getQuizPublicity())
             .publicEditable(bank.getPublicEditable())
-            .subCategories(null)
+            .subCategories(bank.getSubCategories() == null ? null : bank.getSubCategories().stream().map(SubCategoryResponse::of).collect(Collectors.toList()))
             .draft(bank.getDraft())
             .totalQuestions((bank.getQuestions() == null) ? 0 : bank.getQuestions().size())
             .createdBy(ProfileResponse.of(bank.getCreatedBy()))
@@ -54,6 +55,7 @@ public class BankResponse {
             .manageBanks(bank.getManageBanks().stream().map(ManageBankResponse::of)
                 .collect(Collectors.toList()))
             .totalUpVotes((bank.getUpVoteUsers() == null) ? 0 : bank.getUpVoteUsers().size())
+
             .build();
     }
 

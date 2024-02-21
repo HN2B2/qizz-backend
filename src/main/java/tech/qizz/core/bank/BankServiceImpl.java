@@ -3,18 +3,25 @@ package tech.qizz.core.bank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import tech.qizz.core.bank.dto.BankResponse;
 import tech.qizz.core.bank.dto.CreateBankRequest;
+import tech.qizz.core.bank.dto.CreateSubCategoryToBankRequest;
 import tech.qizz.core.bank.dto.UpdateBankRequest;
 import tech.qizz.core.entity.ManageBank;
 import tech.qizz.core.entity.QuizBank;
+import tech.qizz.core.entity.SubCategory;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.exception.NotFoundException;
 import tech.qizz.core.manageBank.ManageBankRepository;
 import tech.qizz.core.manageBank.dto.CreateManageBankRequest;
+import tech.qizz.core.manageCategory.CategoryRepository;
+import tech.qizz.core.manageSubCategory.SubCategoryRepository;
 import tech.qizz.core.manageUser.UserRepository;
 
 @AllArgsConstructor
@@ -24,6 +31,7 @@ public class BankServiceImpl implements BankService {
     private BankRepository bankRepository;
     private UserRepository userRepository;
     private ManageBankRepository manageBankRepository;
+    private SubCategoryRepository subCategoryRepository;
     private final ModelMapper modelMapper;
 
     @Override
@@ -46,6 +54,11 @@ public class BankServiceImpl implements BankService {
         bank.getManageBanks().stream().map(
             (manageBank) -> userRepository.findByEmail(manageBank.getEmail()).orElseThrow(
                 () -> new NotFoundException("Email " + manageBank.getEmail() + " not found")));
+
+//        bank.getSubCategories().stream().map(
+//            (subCategory) -> subCategoryRepository.findById(subCategory).orElseThrow(
+//                () -> new NotFoundException("Category " + subCategory + " not found"))
+//        );
         QuizBank savedBank = QuizBank.builder()
             .name(bank.getName())
             .description(bank.getDescription())
@@ -55,6 +68,8 @@ public class BankServiceImpl implements BankService {
             .draft(bank.getDraft())
             .createdBy(user)
             .modifiedBy(user)
+//                .subCategories(null)
+//            .subCategories((Set<SubCategory>) bank.getSubCategories().stream().map((subCategory) -> subCategoryRepository.findById(subCategory)))
             .build();
         QuizBank newBank = bankRepository.save(savedBank);
         List<ManageBank> manageBankss = new ArrayList<ManageBank>();
@@ -81,6 +96,7 @@ public class BankServiceImpl implements BankService {
         bank.getManageBanks().stream().map(
             (manageBank) -> userRepository.findByEmail(manageBank.getEmail()).orElseThrow(
                 () -> new NotFoundException("Email " + manageBank.getEmail() + " not found")));
+
         manageBankRepository.deleteAllByQuizBank(oldBank);
 
         //set lại người chỉnh sửa
@@ -107,5 +123,23 @@ public class BankServiceImpl implements BankService {
         QuizBank bank = bankRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Bank not found"));
         bankRepository.delete(bank);
+    }
+
+    @Override
+    public BankResponse updateSubCategoryToBank(Long id, CreateSubCategoryToBankRequest subCategories, User user) {
+        QuizBank bank = bankRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Bank not found"));
+        bank.setSubCategories(subCategoryRepository.findAllById(subCategories.getSubCategories()).stream().collect(Collectors.toSet()));
+        return BankResponse.of(bankRepository.save(bank));
+    }
+
+    @Override
+    public BankResponse addSubCategoryToBank(Long id, CreateSubCategoryToBankRequest subCategories, User user) {
+        QuizBank bank = bankRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Bank not found"));
+        bank.setSubCategories(subCategoryRepository.findAllById(subCategories.getSubCategories()).stream().collect(Collectors.toSet()));
+//        //bank.getSubCategories().addAll(subCategoryRepository.findAllById(subCategories));
+//        subCategories.getSubCategories().forEach((subCategory) -> bank.getSubCategories().add(subCategoryRepository.findById(subCategory).get()));
+        return BankResponse.of(bankRepository.save(bank));
     }
 }

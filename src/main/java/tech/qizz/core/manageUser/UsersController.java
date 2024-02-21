@@ -54,6 +54,16 @@ public class UsersController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @GetMapping("/email")
+    @PreAuthorize("hasAnyAuthority('STAFF', 'ADMIN', 'USER')")
+    public ResponseEntity<GetAllUserResponse> getAllUserEmailsByKeyword(
+            @RequestParam(required = false, defaultValue = "") String keyword
+    ) {
+        GetAllUserResponse user = usersService.getAllUserEmails(keyword);
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('USER', 'STAFF', 'ADMIN')")
     public ResponseEntity<UsersResponse> getUserById(@PathVariable Long id) {

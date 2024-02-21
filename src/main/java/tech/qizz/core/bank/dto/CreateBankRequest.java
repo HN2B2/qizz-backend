@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import tech.qizz.core.manageBank.dto.CreateManageBankRequest;
+import tech.qizz.core.manageSubCategory.dto.CreateSubCategoryRequest;
 
 import java.util.List;
 import java.util.Set;
@@ -29,6 +30,9 @@ public class CreateBankRequest {
     private Boolean draft;
     @JsonProperty("manageBanks")
     private List<CreateManageBankRequest> manageBanks;
+
+//    @JsonProperty("subCategories")
+//    private List<Long> subCategories;
 //còn list subcategories nữa
 
 }
