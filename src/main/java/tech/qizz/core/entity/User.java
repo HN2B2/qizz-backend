@@ -41,7 +41,7 @@ import tech.qizz.core.entity.constant.UserRole;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class User implements UserDetails {
+public class    User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import tech.qizz.core.annotation.RequestUser;
 import tech.qizz.core.bank.dto.CreateBankRequest;
 import tech.qizz.core.bank.dto.BankResponse;
+import tech.qizz.core.bank.dto.CreateSubCategoryToBankRequest;
 import tech.qizz.core.bank.dto.UpdateBankRequest;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.exception.BadRequestException;
 import tech.qizz.core.user.UserService;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -47,6 +50,18 @@ public class BankController {
     public ResponseEntity<HttpStatus> deleteBankRequest(@PathVariable Long id, @RequestUser User user) {
         bankService.deleteBank(id, user);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/{id}/subCategory")
+    public ResponseEntity<BankResponse> updateSubCategoryToBank(@PathVariable Long id,@Valid @RequestBody CreateSubCategoryToBankRequest subCategories, @RequestUser User user) {
+        BankResponse updatedBank = bankService.updateSubCategoryToBank(id, subCategories, user);
+        return new ResponseEntity<>(updatedBank,HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/subCategory")
+    public ResponseEntity<BankResponse> addSubCategoryToBank(@PathVariable Long id, @Valid @RequestBody CreateSubCategoryToBankRequest subCategories, @RequestUser User user) {
+        BankResponse updatedBank = bankService.addSubCategoryToBank(id, subCategories, user);
+        return new ResponseEntity<>(updatedBank,HttpStatus.CREATED);
     }
 
 }

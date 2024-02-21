@@ -91,4 +91,14 @@ public class UsersServiceImpl implements UsersService {
         }
         userRepository.delete(user.get());
     }
+
+    @Override
+    public GetAllUserResponse getAllUserEmails(String keyword) {
+        Pageable pageable = PageRequest.of(0, 5);
+        Page<User> users = userRepository.findUserEmailsByKeyword(
+                keyword,
+                pageable
+        );
+        return GetAllUserResponse.of(users);
+    }
 }

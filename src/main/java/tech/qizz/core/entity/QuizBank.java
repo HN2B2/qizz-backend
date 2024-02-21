@@ -77,8 +77,16 @@ public class QuizBank {
     @JoinColumn(name = "modified_by", referencedColumnName = "user_id")
     private User modifiedBy;
 
-    @OneToMany(mappedBy = "quizBank",cascade = CascadeType.ALL)
-    private List<QuizSubCategory> quizSubCategories;
+//    @OneToMany(mappedBy = "quizBank",cascade = CascadeType.ALL)
+//    private List<QuizSubCategory> quizSubCategories;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "quiz_sub_categories",
+            joinColumns = @JoinColumn(name = "bank_id", referencedColumnName = "quiz_bank_id"),
+            inverseJoinColumns = @JoinColumn(name = "sub_category_id", referencedColumnName = "sub_category_id")
+    )
+    private Set<SubCategory> subCategories;
+
 
     @OneToMany(mappedBy = "quizBank", cascade = CascadeType.ALL)
     private List<FavoriteBank> favoriteBanks;
