@@ -61,6 +61,6 @@ public class QuestionServiceImpl implements QuestionService {
     public List<QuestionResponse> getAllQuestionsByBankId(Long bankId) {
 
         QuizBank quizBank = bankRepository.findById(bankId).orElseThrow(() -> new NotFoundException("Bank not found"));
-        return questionRepository.findAllByQuizBank(quizBank).stream().map(QuestionResponse::of).toList();
+        return questionRepository.findAllByQuizBankAndDisabledFalse(quizBank).stream().map(QuestionResponse::of).toList();
     }
 }

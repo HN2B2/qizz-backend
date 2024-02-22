@@ -29,8 +29,14 @@ public class ManageBankController {
     }
 
     @DeleteMapping("/bankId/{bankId}")
-    public ResponseEntity<Void> deleteManageBank(@PathVariable Long bankId){
+    public ResponseEntity<HttpStatus> deleteManageBanks(@PathVariable Long bankId){
         manageBankService.deleteAllByQuizBank(bankId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/{manageBankId}")
+    public ResponseEntity<HttpStatus> deleteManageBank(@PathVariable Long manageBankId){
+        manageBankService.deleteManageBank(manageBankId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

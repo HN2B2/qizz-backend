@@ -14,4 +14,6 @@ public interface ManageBankService {
     public ManageBankResponse createManageBank(Long bankId, CreateManageBankRequest body);
 
     public void deleteAllByQuizBank(Long bankId);
+
+    public void deleteManageBank(Long manageBankId);
 }
