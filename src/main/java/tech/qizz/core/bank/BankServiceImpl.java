@@ -137,8 +137,8 @@ public class BankServiceImpl implements BankService {
     public BankResponse addSubCategoryToBank(Long id, CreateSubCategoryToBankRequest subCategories, User user) {
         QuizBank bank = bankRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Bank not found"));
-        bank.setSubCategories(subCategoryRepository.findAllById(subCategories.getSubCategories()).stream().collect(Collectors.toSet()));
-//        //bank.getSubCategories().addAll(subCategoryRepository.findAllById(subCategories));
+//        bank.setSubCategories(subCategoryRepository.findAllById(subCategories.getSubCategories()).stream().collect(Collectors.toSet()));
+        bank.getSubCategories().addAll(subCategoryRepository.findAllById(subCategories.getSubCategories()));
 //        subCategories.getSubCategories().forEach((subCategory) -> bank.getSubCategories().add(subCategoryRepository.findById(subCategory).get()));
         return BankResponse.of(bankRepository.save(bank));
     }

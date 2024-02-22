@@ -49,4 +49,11 @@ public class ManageBankServiceImpl implements ManageBankService {
             .orElseThrow(() -> new NotFoundException("Bank not found"));
         manageBankRepository.deleteAllByQuizBank(quizBank);
     }
+
+    @Override
+    public void deleteManageBank(Long manageBankId) {
+        ManageBank manageBank = manageBankRepository.findById(manageBankId)
+            .orElseThrow(() -> new NotFoundException("Manage bank not found"));
+        manageBankRepository.delete(manageBank);
+    }
 }

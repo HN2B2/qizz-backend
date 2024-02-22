@@ -10,5 +10,8 @@ import java.util.List;
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 
-    public List<Question> findAllByQuizBank(QuizBank quizBank);
+    public List<Question> findAllByQuizBankAndDisabledFalse(QuizBank quizBank);
+    //I want list question by quiz bank but question.disabled=false
+
+
 }
