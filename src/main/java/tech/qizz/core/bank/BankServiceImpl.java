@@ -8,11 +8,12 @@ import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import tech.qizz.core.bank.dto.BankResponse;
-import tech.qizz.core.bank.dto.CreateBankRequest;
-import tech.qizz.core.bank.dto.CreateSubCategoryToBankRequest;
-import tech.qizz.core.bank.dto.UpdateBankRequest;
+import tech.qizz.core.bank.dto.*;
 import tech.qizz.core.entity.ManageBank;
 import tech.qizz.core.entity.QuizBank;
 import tech.qizz.core.entity.SubCategory;
@@ -141,5 +142,25 @@ public class BankServiceImpl implements BankService {
         bank.getSubCategories().addAll(subCategoryRepository.findAllById(subCategories.getSubCategories()));
 //        subCategories.getSubCategories().forEach((subCategory) -> bank.getSubCategories().add(subCategoryRepository.findById(subCategory).get()));
         return BankResponse.of(bankRepository.save(bank));
+    }
+
+    @Override
+
+    public GetAllBanksResponse getAllBanks(
+        Integer page,
+        Integer limit,
+        String keyword,
+        String order,
+        String sort,
+        List<Long> subCategoryIds,
+
+        String tab,
+        Boolean draft,
+        User user
+    ) {
+        Sort sortType = sort.equalsIgnoreCase("asc") ? Sort.by(order) : Sort.by(order).descending();
+        Pageable pageable = PageRequest.of(page - 1, limit, sortType);
+        Page<QuizBank> banks = bankRepository.findBanks(keyword, draft, (subCategoryIds==null||subCategoryIds.isEmpty())?null:subCategoryIds, tab, user,pageable);
+        return GetAllBanksResponse.of(banks);
     }
 }
