@@ -27,17 +27,31 @@ public class BankController {
         return new ResponseEntity<>(bank, HttpStatus.OK);
     }
 
-//    @GetMapping("/all")
-//    public ResponseEntity<GetAllBanksResponse> getAllBanks(
-//        @RequestParam(required = false, defaultValue = "1") Integer page,
-//        @RequestParam(required = false, defaultValue = "10") Integer limit,
-//        @RequestParam(required = false, defaultValue = "") String keyword,
-//        @RequestParam(required = false, defaultValue = "id") String order,
-//        @RequestParam(required = false, defaultValue = "desc") String sort,
-//        @RequestUser User user
-//    ) {
-//
-//    }
+    @GetMapping("/all")
+    public ResponseEntity<GetAllBanksResponse> getAllBanks(
+        @RequestParam(required = false, defaultValue = "1") Integer page,
+        @RequestParam(required = false, defaultValue = "10") Integer limit,
+        @RequestParam(required = false, defaultValue = "") String keyword,
+        @RequestParam(required = false, defaultValue = "id") String order,
+        @RequestParam(required = false, defaultValue = "desc") String sort,
+        @RequestParam(required = false) List<Long> subCategoryIds,
+        @RequestParam(required = false, defaultValue = "created") String tab,
+        @RequestParam(required = false, defaultValue = "false") Boolean draft,
+        @RequestUser User user
+    ) {
+        GetAllBanksResponse banks = bankService.getAllBanks(
+            page,
+            limit,
+            keyword,
+            order,
+            sort,
+            subCategoryIds,
+            tab,
+            draft,
+            user
+        );
+        return new ResponseEntity<>(banks, HttpStatus.OK);
+    }
 
     @PostMapping()
     public ResponseEntity<BankResponse> saveBankRequest(@Valid @RequestBody CreateBankRequest bank, @RequestUser User user) {
