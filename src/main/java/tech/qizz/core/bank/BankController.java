@@ -7,10 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import tech.qizz.core.annotation.RequestUser;
-import tech.qizz.core.bank.dto.CreateBankRequest;
-import tech.qizz.core.bank.dto.BankResponse;
-import tech.qizz.core.bank.dto.CreateSubCategoryToBankRequest;
-import tech.qizz.core.bank.dto.UpdateBankRequest;
+import tech.qizz.core.bank.dto.*;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.exception.BadRequestException;
 import tech.qizz.core.user.UserService;
@@ -29,6 +26,18 @@ public class BankController {
         BankResponse bank = bankService.getBankResponseById(id);
         return new ResponseEntity<>(bank, HttpStatus.OK);
     }
+
+//    @GetMapping("/all")
+//    public ResponseEntity<GetAllBanksResponse> getAllBanks(
+//        @RequestParam(required = false, defaultValue = "1") Integer page,
+//        @RequestParam(required = false, defaultValue = "10") Integer limit,
+//        @RequestParam(required = false, defaultValue = "") String keyword,
+//        @RequestParam(required = false, defaultValue = "id") String order,
+//        @RequestParam(required = false, defaultValue = "desc") String sort,
+//        @RequestUser User user
+//    ) {
+//
+//    }
 
     @PostMapping()
     public ResponseEntity<BankResponse> saveBankRequest(@Valid @RequestBody CreateBankRequest bank, @RequestUser User user) {
