@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import tech.qizz.core.takeQuiz.dto.QuizRoomInfoResponse;
 import tech.qizz.core.takeQuiz.dto.WebSocketRequest;
+import tech.qizz.core.takeQuiz.dto.waitingRoom.WaitingRoomResponse;
 
 @Controller
 @CrossOrigin
@@ -18,13 +19,24 @@ public class TakeQuizWebSocketController {
     private final TakeQuizWebSocketService takeQuizWebSocketService;
 
     @MessageMapping("/join/{quizCode}")
-    public QuizRoomInfoResponse joinQuizRoom(
+    public void joinQuizRoom(
         @DestinationVariable String quizCode,
         WebSocketRequest<String> body
     ) {
-        QuizRoomInfoResponse roomInfo = takeQuizWebSocketService.joinQuizRoom(quizCode,
+        QuizRoomInfoResponse<WaitingRoomResponse> waitingRoomInfo = takeQuizWebSocketService.joinQuizRoom(
+            quizCode,
             body.getToken());
-        template.convertAndSend("/play/" + quizCode, roomInfo);
-        return roomInfo;
+        template.convertAndSend("/play/" + quizCode, waitingRoomInfo);
+    }
+
+    @MessageMapping("/start/{quizCode}")
+    public void startQuiz(
+        @DestinationVariable String quizCode
+    ) {
+        try {
+            takeQuizWebSocketService.startQuiz(quizCode);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

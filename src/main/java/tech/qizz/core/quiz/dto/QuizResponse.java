@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import tech.qizz.core.entity.Quiz;
+import tech.qizz.core.entity.constant.QuizState;
 
 @Getter
 @Setter
@@ -30,11 +31,8 @@ public class QuizResponse {
     @JsonProperty("code")
     private String code;
 
-    @JsonProperty("started")
-    private boolean started;
-
-    @JsonProperty("ended")
-    private boolean ended;
+    @JsonProperty("quizState")
+    private QuizState quizState;
 
     public static QuizResponse of(Quiz quiz) {
         return QuizResponse
@@ -44,8 +42,7 @@ public class QuizResponse {
             .description(quiz.getDescription())
             .featuredImage(quiz.getFeaturedImage())
             .code(quiz.getCode())
-            .started(quiz.isStarted())
-            .ended(quiz.isEnded())
+            .quizState(quiz.getQuizState())
             .build();
     }
 }

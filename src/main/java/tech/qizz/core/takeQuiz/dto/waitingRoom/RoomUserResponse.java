@@ -1,4 +1,4 @@
-package tech.qizz.core.takeQuiz.dto;
+package tech.qizz.core.takeQuiz.dto.waitingRoom;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Collections;

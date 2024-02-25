@@ -1,9 +1,13 @@
 package tech.qizz.core.question.dto;
 
-import lombok.*;
-import tech.qizz.core.entity.Question;
-
 import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import tech.qizz.core.entity.Question;
+import tech.qizz.core.entity.constant.QuestionType;
 
 @AllArgsConstructor
 @Getter
@@ -11,11 +15,12 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 public class QuestionResponse {
+
     private Long questionId;
     private String content;
     private Long point;
     private int duration;
-    private String type;
+    private QuestionType type;
     private String answersMetadata;
     private String correctAnswersMetadata;
     private String explainAnswer;
@@ -27,20 +32,20 @@ public class QuestionResponse {
 
     public static QuestionResponse of(Question question) {
         return QuestionResponse.builder()
-                .questionId(question.getQuestionId())
-                .content(question.getContent())
-                .point(question.getPoint())
-                .duration(question.getDuration())
-                .type(question.getType())
-                .answersMetadata(question.getAnswersMetadata())
-                .correctAnswersMetadata(question.getCorrectAnswersMetadata())
-                .explainAnswer(question.getExplainAnswer())
-                .createdAt(question.getCreatedAt())
-                .modifiedAt(question.getModifiedAt())
-                .questionIndex(question.getQuestionIndex())
-                .disabled(question.getDisabled())
-                .quizBankId(question.getQuizBank().getQuizBankId())
-                .build();
+            .questionId(question.getQuestionId())
+            .content(question.getContent())
+            .point(question.getPoint())
+            .duration(question.getDuration())
+            .type(question.getType())
+            .answersMetadata(question.getAnswersMetadata())
+            .correctAnswersMetadata(question.getCorrectAnswersMetadata())
+            .explainAnswer(question.getExplainAnswer())
+            .createdAt(question.getCreatedAt())
+            .modifiedAt(question.getModifiedAt())
+            .questionIndex(question.getQuestionIndex())
+            .disabled(question.getDisabled())
+            .quizBankId(question.getQuizBank().getQuizBankId())
+            .build();
     }
 
 }

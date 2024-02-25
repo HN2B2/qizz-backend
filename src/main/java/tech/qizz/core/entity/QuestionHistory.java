@@ -14,6 +14,7 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.util.Date;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +25,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class QuestionHistory {
 
     @Id
@@ -50,15 +52,14 @@ public class QuestionHistory {
         modifiedAt = new Date();
     }
 
-    @Column(name = "answer_metadata", nullable = false)
+    @Column(name = "answer_metadata")
     private String answerMetadata;
 
     @Column(name = "score", nullable = false)
     private long score;
 
-    @Temporal(TemporalType.TIME)
     @Column(name = "answer_time", nullable = false)
-    private Date answerTime;
+    private Double answerTime;
 
     @ManyToOne
     @JoinColumn(name = "quiz_joined_user_id", referencedColumnName = "quiz_joined_user_id")

@@ -1,27 +1,30 @@
 package tech.qizz.core.question;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import tech.qizz.core.bank.BankRepository;
 import tech.qizz.core.entity.Question;
 import tech.qizz.core.entity.QuizBank;
+import tech.qizz.core.entity.constant.QuestionType;
 import tech.qizz.core.exception.NotFoundException;
 import tech.qizz.core.question.dto.CreateQuestionRequest;
 import tech.qizz.core.question.dto.QuestionResponse;
 import tech.qizz.core.question.dto.UpdateQuestionRequest;
 
-import java.util.List;
-
 @Service
 @AllArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
+
     private QuestionRepository questionRepository;
     private BankRepository bankRepository;
     private final ModelMapper modelMapper;
+
     @Override
     public QuestionResponse getQuestionById(Long id) {
-        Question question = questionRepository.findById(id).orElseThrow(() -> new NotFoundException("Question not found"));
+        Question question = questionRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Question not found"));
 
         return QuestionResponse.of(question);
     }
@@ -29,38 +32,43 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public QuestionResponse createQuestion(CreateQuestionRequest body) {
         Question question = Question.builder()
-                .content(body.getContent())
-                .point(body.getPoint())
-                .duration(body.getDuration())
-                .type(body.getType())
-                .answersMetadata(body.getAnswersMetadata())
-                .correctAnswersMetadata(body.getCorrectAnswersMetadata())
-                .explainAnswer(body.getExplainAnswer())
-                .questionIndex(body.getQuestionIndex())
-                .disabled(body.isDisabled())
-                .quizBank(bankRepository.findById(body.getQuizBankId()).orElseThrow(() -> new NotFoundException("Bank not found")))
-                .build();
+            .content(body.getContent())
+            .point(body.getPoint())
+            .duration(body.getDuration())
+            .type(QuestionType.validateQuestionType(body.getType()))
+            .answersMetadata(body.getAnswersMetadata())
+            .correctAnswersMetadata(body.getCorrectAnswersMetadata())
+            .explainAnswer(body.getExplainAnswer())
+            .questionIndex(body.getQuestionIndex())
+            .disabled(body.isDisabled())
+            .quizBank(bankRepository.findById(body.getQuizBankId())
+                .orElseThrow(() -> new NotFoundException("Bank not found")))
+            .build();
         return QuestionResponse.of(questionRepository.save(question));
     }
 
     @Override
     public QuestionResponse updateQuestion(Long id, UpdateQuestionRequest body) {
 
-        Question question = questionRepository.findById(id).orElseThrow(() -> new NotFoundException("Question not found"));
+        Question question = questionRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Question not found"));
         modelMapper.map(body, question);
         return QuestionResponse.of(questionRepository.save(question));
     }
 
     @Override
     public void deleteQuestion(Long id) {
-        Question question = questionRepository.findById(id).orElseThrow(() -> new NotFoundException("Question not found"));
+        Question question = questionRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Question not found"));
         questionRepository.delete(question);
     }
 
     @Override
     public List<QuestionResponse> getAllQuestionsByBankId(Long bankId) {
 
-        QuizBank quizBank = bankRepository.findById(bankId).orElseThrow(() -> new NotFoundException("Bank not found"));
-        return questionRepository.findAllByQuizBankAndDisabledFalse(quizBank).stream().map(QuestionResponse::of).toList();
+        QuizBank quizBank = bankRepository.findById(bankId)
+            .orElseThrow(() -> new NotFoundException("Bank not found"));
+        return questionRepository.findAllByQuizBankAndDisabledFalse(quizBank).stream()
+            .map(QuestionResponse::of).toList();
     }
 }
