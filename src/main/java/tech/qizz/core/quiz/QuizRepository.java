@@ -9,4 +9,5 @@ import tech.qizz.core.entity.Quiz;
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
 
     Optional<Quiz> findByCode(String code);
+    boolean existsByCode(String code);
 }
