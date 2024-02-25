@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import tech.qizz.core.entity.Quiz;
+import tech.qizz.core.entity.User;
 import tech.qizz.core.entity.constant.QuizState;
 
 @Getter
@@ -19,8 +20,8 @@ public class QuizResponse {
     @JsonProperty("quizId")
     private long quizId;
 
-    @JsonProperty("name")
-    private String name;
+    @JsonProperty("quizName")
+    private String quizName;
 
     @JsonProperty("description")
     private String description;
@@ -34,15 +35,22 @@ public class QuizResponse {
     @JsonProperty("quizState")
     private QuizState quizState;
 
+    @JsonProperty("created_by")
+    private Long createdBy;
+
+    @JsonProperty("bank_id")
+    private Long bankId;
     public static QuizResponse of(Quiz quiz) {
         return QuizResponse
             .builder()
             .quizId(quiz.getQuizId())
-            .name(quiz.getName())
+            .quizName(quiz.getName())
             .description(quiz.getDescription())
             .featuredImage(quiz.getFeaturedImage())
             .code(quiz.getCode())
             .quizState(quiz.getQuizState())
+                .createdBy(quiz.getCreatedBy().getUserId())
+            .bankId(quiz.getQuizBank().getQuizBankId())
             .build();
     }
 }

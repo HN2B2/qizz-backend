@@ -21,4 +21,5 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
         Date to,
         Pageable pageable
     );
+    boolean existsByCode(String code);
 }
