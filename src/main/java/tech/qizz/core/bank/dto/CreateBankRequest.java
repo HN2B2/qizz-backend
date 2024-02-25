@@ -26,7 +26,7 @@ public class CreateBankRequest {
     private Boolean publicEditable;
     @JsonProperty("draft")
     private Boolean draft;
-    @JsonProperty("tech/qizz/core/manageBanks")
+    @JsonProperty("manageBanks")
     private List<CreateManageBankRequest> manageBanks;
 
 //    @JsonProperty("subCategories")
