@@ -14,14 +14,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import tech.qizz.core.bank.dto.*;
-import tech.qizz.core.entity.ManageBank;
-import tech.qizz.core.entity.QuizBank;
-import tech.qizz.core.entity.SubCategory;
-import tech.qizz.core.entity.User;
+import tech.qizz.core.entity.*;
 import tech.qizz.core.exception.NotFoundException;
 import tech.qizz.core.manageBank.ManageBankRepository;
 import tech.qizz.core.manageBank.dto.CreateManageBankRequest;
 import tech.qizz.core.manageCategory.CategoryRepository;
+import tech.qizz.core.manageCategory.dto.CategoryResponse;
 import tech.qizz.core.manageSubCategory.SubCategoryRepository;
 import tech.qizz.core.manageUser.UserRepository;
 
@@ -34,6 +32,7 @@ public class BankServiceImpl implements BankService {
     private ManageBankRepository manageBankRepository;
     private SubCategoryRepository subCategoryRepository;
     private final ModelMapper modelMapper;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public BankResponse getBankResponseById(Long id) {
@@ -162,5 +161,16 @@ public class BankServiceImpl implements BankService {
         Pageable pageable = PageRequest.of(page - 1, limit, sortType);
         Page<QuizBank> banks = bankRepository.findBanks(keyword, draft, (subCategoryIds==null||subCategoryIds.isEmpty())?null:subCategoryIds, tab, user,pageable);
         return GetAllBanksResponse.of(banks);
+    }
+
+    @Override
+    public List<BanksByCategoryResponse> getListBanksByCategories(Long top) {
+        List<Category> categories = categoryRepository.findAll();
+        List<BanksByCategoryResponse> banksByCategoryResponses = new ArrayList<>();
+        categories.forEach((category) -> {
+            List<QuizBank> banks = bankRepository.findTop5ByCategoryOrderByUpvotesDesc(category, PageRequest.of(0, top.intValue()));
+            banksByCategoryResponses.add(new BanksByCategoryResponse(CategoryResponse.of(category), banks.stream().map(BankResponse::of).toList()));
+        });
+        return banksByCategoryResponses;
     }
 }

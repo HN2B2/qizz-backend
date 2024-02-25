@@ -26,8 +26,7 @@ public class UpdateBankRequest {
     private Boolean publicEditable;
     @JsonProperty("draft")
     private Boolean draft;
-    @JsonProperty("tech/qizz/core/manageBanks")
+    @JsonProperty("manageBanks")
     private List<CreateManageBankRequest> manageBanks;
 
-    //còn list subcategories nữa
 }
