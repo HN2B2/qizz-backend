@@ -47,6 +47,7 @@ public class QuizQuestion {
     protected void onCreate() {
         createdAt = new Date();
         modifiedAt = createdAt;
+        answering = false;
     }
 
     @PreUpdate
@@ -65,5 +66,8 @@ public class QuizQuestion {
     @ManyToOne
     @JoinColumn(name = "question_id", referencedColumnName = "question_id")
     private Question question;
+
+    @Column(name = "answering")
+    private Boolean answering;
 
 }

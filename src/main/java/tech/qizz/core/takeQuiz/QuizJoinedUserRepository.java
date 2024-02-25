@@ -1,6 +1,7 @@
 package tech.qizz.core.takeQuiz;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import tech.qizz.core.entity.Quiz;
@@ -9,6 +10,8 @@ import tech.qizz.core.entity.User;
 
 @Repository
 public interface QuizJoinedUserRepository extends JpaRepository<QuizJoinedUser, Long> {
+
+    Optional<QuizJoinedUser> findByQuizAndUser(Quiz quiz, User user);
 
     boolean existsByQuizAndUser(Quiz quiz, User user);
 

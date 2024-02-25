@@ -1,19 +1,19 @@
 package tech.qizz.core.takeQuiz.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import tech.qizz.core.entity.constant.QuizState;
 
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuizRoomInfoResponse {
+public class QuizRoomInfoResponse<T> {
 
     @JsonProperty("quizCode")
     private String quizCode;
@@ -21,18 +21,9 @@ public class QuizRoomInfoResponse {
     @JsonProperty("quizName")
     private String quizName;
 
-    @JsonProperty("total")
-    private Integer total;
+    @JsonProperty("state")
+    private QuizState state;
 
-    @JsonProperty("current")
-    private Integer current;
-
-    @JsonProperty("started")
-    private boolean started;
-
-    @JsonProperty("ended")
-    private boolean ended;
-
-    @JsonProperty("users")
-    private List<RoomUserResponse> users;
+    @JsonProperty("data")
+    private T data;
 }

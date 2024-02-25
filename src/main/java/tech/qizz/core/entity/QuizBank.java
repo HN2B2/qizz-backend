@@ -1,12 +1,32 @@
 package tech.qizz.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import lombok.*;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "quiz_banks")
@@ -58,7 +78,7 @@ public class QuizBank {
     @Column(name = "public_editable")
     private Boolean publicEditable;
 
-    @Column(name="draft", columnDefinition = "bit")
+    @Column(name = "draft", columnDefinition = "bit")
     private Boolean draft;
 
     @JsonIgnore
@@ -77,23 +97,25 @@ public class QuizBank {
     @JoinColumn(name = "modified_by", referencedColumnName = "user_id")
     private User modifiedBy;
 
-//    @OneToMany(mappedBy = "quizBank",cascade = CascadeType.ALL)
+    //    @OneToMany(mappedBy = "quizBank",cascade = CascadeType.ALL)
 //    private List<QuizSubCategory> quizSubCategories;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
-            name = "quiz_sub_categories",
-            joinColumns = @JoinColumn(name = "bank_id", referencedColumnName = "quiz_bank_id"),
-            inverseJoinColumns = @JoinColumn(name = "sub_category_id", referencedColumnName = "sub_category_id")
+        name = "quiz_sub_categories",
+        joinColumns = @JoinColumn(name = "bank_id", referencedColumnName = "quiz_bank_id"),
+        inverseJoinColumns = @JoinColumn(name = "sub_category_id", referencedColumnName = "sub_category_id")
     )
     private Set<SubCategory> subCategories;
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "quizBank", cascade = CascadeType.ALL)
     private List<FavoriteBank> favoriteBanks;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "quizBank", cascade = CascadeType.ALL)
     private List<ManageBank> manageBanks;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
         name = "upvote_banks",
@@ -101,7 +123,6 @@ public class QuizBank {
         inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     )
     private Set<User> upVoteUsers;
-
 
 
 }
