@@ -6,12 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tech.qizz.core.annotation.RequestUser;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.report.dto.GetAllReportResponse;
+import tech.qizz.core.report.dto.ReportDetailResponse;
 
 @RestController
 @CrossOrigin
@@ -31,18 +33,27 @@ public class ReportController {
         @RequestParam(required = false) String to,
         @RequestUser User user
     ) {
+        GetAllReportResponse reports = reportService.getAllReport(
+            page,
+            limit,
+            name,
+            from,
+            to,
+            user
+        );
+        return new ResponseEntity<>(reports, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/{quizId}")
+    @PreAuthorize("hasAnyAuthority('USER', 'STAFF', 'ADMIN')")
+    public ResponseEntity<ReportDetailResponse> getReportDetail(
+        @PathVariable Long quizId
+    ) {
         try {
-            GetAllReportResponse reports = reportService.getAllReport(
-                page,
-                limit,
-                name,
-                from,
-                to,
-                user
-            );
-            return new ResponseEntity<>(reports, HttpStatus.OK);
+            ReportDetailResponse report = reportService.getReportDetail(quizId);
+            return new ResponseEntity<>(report, HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println(e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

@@ -1,8 +1,8 @@
 package tech.qizz.core.report;
 
-import java.text.ParseException;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.report.dto.GetAllReportResponse;
+import tech.qizz.core.report.dto.ReportDetailResponse;
 
 public interface ReportService {
 
@@ -13,5 +13,7 @@ public interface ReportService {
         String from,
         String to,
         User user
-    ) throws ParseException;
+    );
+
+    ReportDetailResponse getReportDetail(Long quizId);
 }

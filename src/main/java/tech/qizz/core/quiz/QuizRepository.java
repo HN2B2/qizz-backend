@@ -14,7 +14,7 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
 
     Optional<Quiz> findByCode(String code);
 
-    Page<Quiz> findQuizzesByNameContainingAndCreatedByAndCreatedAtBetween(
+    Page<Quiz> findAllByNameContainingAndCreatedByAndCreatedAtBetween(
         String name,
         User createdBy,
         Date from,
