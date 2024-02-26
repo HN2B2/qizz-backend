@@ -28,4 +28,6 @@ public interface BankService {
         Boolean draft,
         User user
     );
+
+    public List<BanksByCategoryResponse> getListBanksByCategories(Long top);
 }
