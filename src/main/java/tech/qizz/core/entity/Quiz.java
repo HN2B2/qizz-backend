@@ -1,6 +1,7 @@
 package tech.qizz.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,18 +20,21 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+
+import jakarta.persistence.*;
+
 import java.util.Date;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import lombok.*;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import tech.qizz.core.entity.constant.QuizState;
 
 @Entity
 @Table(name = "quizzes")
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Quiz {
@@ -79,7 +83,7 @@ public class Quiz {
     private String code;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "quiz", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<QuizSetting> quizSettings;
 
     @ManyToOne
