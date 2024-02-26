@@ -87,4 +87,10 @@ public class BankController {
         return new ResponseEntity<>(updatedBank,HttpStatus.CREATED);
     }
 
+    @GetMapping("/all/categories/{top}")
+    public ResponseEntity<List<BanksByCategoryResponse>> getListBanksByCategories(@PathVariable Long top) {
+        List<BanksByCategoryResponse> banks = bankService.getListBanksByCategories(top);
+        return new ResponseEntity<>(banks,HttpStatus.OK);
+    }
+
 }

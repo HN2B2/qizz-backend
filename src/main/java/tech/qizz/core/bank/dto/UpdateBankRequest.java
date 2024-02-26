@@ -33,5 +33,4 @@ public class UpdateBankRequest {
     @JsonProperty("manageBanks")
     private List<CreateManageBankRequest> manageBanks;
 
-    //còn list subcategories nữa
 }
