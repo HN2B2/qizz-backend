@@ -13,6 +13,7 @@ import tech.qizz.core.entity.User;
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
 
     Optional<Quiz> findByCode(String code);
+    boolean existsByCode(String code);
 
     Page<Quiz> findAllByNameContainingAndCreatedByAndCreatedAtBetween(
         String name,
@@ -21,5 +22,4 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
         Date to,
         Pageable pageable
     );
-    boolean existsByCode(String code);
 }
