@@ -159,7 +159,7 @@ public class BankServiceImpl implements BankService {
     ) {
         Sort sortType = sort.equalsIgnoreCase("asc") ? Sort.by(order) : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page - 1, limit, sortType);
-        Page<QuizBank> banks = bankRepository.findBanks(keyword, draft, (subCategoryIds==null||subCategoryIds.isEmpty())?null:subCategoryIds, tab, user,pageable);
+        Page<QuizBank> banks = bankRepository.findBanks(keyword, draft, (subCategoryIds==null||subCategoryIds.isEmpty())?null:subCategoryIds, (subCategoryIds==null||subCategoryIds.isEmpty())?0:subCategoryIds.size(),tab, user,pageable);
         return GetAllBanksResponse.of(banks);
     }
 
