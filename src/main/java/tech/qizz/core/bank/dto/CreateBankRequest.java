@@ -6,7 +6,6 @@ import lombok.*;
 import tech.qizz.core.manageBank.dto.CreateManageBankRequest;
 
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -29,6 +28,9 @@ public class CreateBankRequest {
     private Boolean draft;
     @JsonProperty("manageBanks")
     private List<CreateManageBankRequest> manageBanks;
+
+//    @JsonProperty("subCategories")
+//    private List<Long> subCategories;
 //còn list subcategories nữa
 
 }

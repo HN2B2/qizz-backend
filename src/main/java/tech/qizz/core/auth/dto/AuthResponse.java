@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import tech.qizz.core.user.dto.UserResponse;
+import tech.qizz.core.user.dto.ProfileResponse;
 
 @Getter
 @Setter
@@ -16,7 +16,7 @@ import tech.qizz.core.user.dto.UserResponse;
 public class AuthResponse {
 
     @JsonProperty("user")
-    private UserResponse user;
+    private ProfileResponse user;
 
     @JsonProperty("token")
     private String token;

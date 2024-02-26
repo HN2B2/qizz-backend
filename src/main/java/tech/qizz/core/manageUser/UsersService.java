@@ -18,6 +18,8 @@ public interface UsersService {
         String sort
     );
 
+    public GetAllUserResponse getAllUserEmails(String keyword);
+
     public UsersResponse getUserById(Long id);
 
     public UsersResponse createUser(CreateUserRequest body);

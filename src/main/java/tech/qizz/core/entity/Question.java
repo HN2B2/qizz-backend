@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,8 +20,12 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.util.Date;
 import java.util.List;
-
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import tech.qizz.core.entity.constant.QuestionType;
 
 @Entity
 @Table(name = "questions")
@@ -47,7 +53,8 @@ public class Question {
     private Integer duration;
 
     @Column(name = "type", nullable = false)
-    private String type;
+    @Enumerated(value = EnumType.STRING)
+    private QuestionType type;
 
     @Lob
     @Column(name = "answers_metadata")

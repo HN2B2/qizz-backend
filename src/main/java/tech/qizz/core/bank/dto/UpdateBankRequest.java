@@ -2,10 +2,13 @@ package tech.qizz.core.bank.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
-import tech.qizz.core.manageBank.dto.CreateManageBankRequest;
-
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import tech.qizz.core.manageBank.dto.CreateManageBankRequest;
 
 @Getter
 @Setter
@@ -13,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class UpdateBankRequest {
+
     @NotBlank
     @JsonProperty("name")
     private String name;

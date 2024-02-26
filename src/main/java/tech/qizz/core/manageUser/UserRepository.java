@@ -18,6 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
         "u.email LIKE CONCAT('%', :keyword, '%') OR " +
         "u.displayName LIKE CONCAT('%', :keyword, '%')) AND " +
         "(:role IS NULL OR u.role = :role) AND " +
+            "(u.role!='GUEST') AND "+
         "(:banned IS NULL OR u.banned = :banned)"
     )
     Page<User> findUsersByKeywordAndRoleAndBanned(
@@ -25,6 +26,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
         @Param("role") UserRole role,
         @Param("banned") Boolean banned,
         Pageable pageable
+    );
+
+    @Query("SELECT u FROM User u WHERE " +
+            "(u.email LIKE CONCAT('%', :keyword, '%'))"
+    )
+    Page<User> findUserEmailsByKeyword(
+            @Param("keyword") String keyword,
+            Pageable pageable
     );
 
     Optional<User> findByEmail(String email);

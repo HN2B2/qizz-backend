@@ -1,7 +1,9 @@
 package tech.qizz.core.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,7 +39,11 @@ public class ProfileResponse {
             .email(user.getEmail())
             .displayName(user.getDisplayName())
             .role(user.getRole())
-            .metadata(user.getUserMetadatas().stream().map(UserMetadataResponse::of).toList())
+            .metadata(
+                Optional.ofNullable(user.getUserMetadatas())
+                    .map(metadatas -> metadatas.stream().map(UserMetadataResponse::of).toList())
+                    .orElse(Collections.emptyList())
+            )
             .build();
     }
 }

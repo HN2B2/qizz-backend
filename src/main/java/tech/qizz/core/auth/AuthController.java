@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tech.qizz.core.auth.dto.AuthResponse;
+import tech.qizz.core.auth.dto.CreateGuestRequest;
 import tech.qizz.core.auth.dto.LoginRequest;
 import tech.qizz.core.auth.dto.RegisterRequest;
 import tech.qizz.core.exception.BadRequestException;
@@ -48,4 +49,15 @@ public class AuthController {
         return new ResponseEntity<>(authService.register(body, response), HttpStatus.CREATED);
     }
 
+    @PostMapping("/create-guest")
+    public ResponseEntity<AuthResponse> createGuest(
+        @Valid @RequestBody CreateGuestRequest body,
+        BindingResult result,
+        HttpServletResponse response
+    ) {
+        if (result.hasErrors() || body == null) {
+            throw new BadRequestException("Invalid request");
+        }
+        return new ResponseEntity<>(authService.createGuest(body, response), HttpStatus.CREATED);
+    }
 }

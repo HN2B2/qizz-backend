@@ -1,9 +1,11 @@
 package tech.qizz.core.user;
 
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import tech.qizz.core.auth.jwt.JwtService;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.entity.UserMetadata;
 import tech.qizz.core.exception.BadRequestException;
@@ -20,6 +22,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     private static final Map<String, String> KEY_REGEX_MAP = Map.of(
         "avatarUrl", "^https?://.+\\.(png|jpg|jpeg|gif)$",
@@ -42,7 +45,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ProfileResponse updateProfile(Long id, UpsertProfileRequest body) {
+    public ProfileResponse updateProfile(Long id, UpsertProfileRequest body,
+        HttpServletResponse response) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("User not found"));
         body.getMetadata().forEach(metadata -> {
@@ -53,7 +57,11 @@ public class UserServiceImpl implements UserService {
         user.setDisplayName(body.getDisplayName());
         user.setUsername(body.getUsername());
         body.getMetadata().forEach(metadata -> upsertMetadata(user, metadata));
-        return ProfileResponse.of(userRepository.save(user));
+        ProfileResponse profileResponse = ProfileResponse.of(user);
+        String token = jwtService.generateToken(user);
+        jwtService.setJwtToCookie(response, token);
+        jwtService.setUserDataToCookie(response, profileResponse);
+        return profileResponse;
     }
 
     private void upsertMetadata(User user, UpsertProfileMetadataRequest metadata) {

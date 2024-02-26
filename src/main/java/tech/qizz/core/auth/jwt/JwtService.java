@@ -1,10 +1,16 @@
 package tech.qizz.core.auth.jwt;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,7 +19,11 @@ import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import tech.qizz.core.entity.User;
+import tech.qizz.core.manageUser.UserRepository;
+import tech.qizz.core.user.dto.ProfileResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +34,11 @@ public class JwtService {
 
     @Value("${jwt.expiration}")
     private long EXPIRATION;
+
+
+    private final UserRepository userRepository;
+    private final UserDetailsService userDetailsService;
+    private final ObjectMapper mapper;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -75,5 +90,34 @@ public class JwtService {
     private Key getSigninKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public User extractUser(String token) {
+        String userEmail = extractUsername(token);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+        if (!isTokenValid(token, userDetails)) {
+            return null;
+        }
+        return userRepository.findByEmail(userEmail).orElse(null);
+    }
+
+    public void setJwtToCookie(HttpServletResponse response, String token) {
+        Cookie cookie = new Cookie("token", token);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+    }
+
+    public void setUserDataToCookie(HttpServletResponse response, ProfileResponse user) {
+        try {
+            String userJson = URLEncoder.encode(mapper.writeValueAsString(user),
+                StandardCharsets.UTF_8);
+            Cookie cookie = new Cookie("user", userJson);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

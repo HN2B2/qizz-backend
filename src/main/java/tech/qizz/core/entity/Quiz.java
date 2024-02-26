@@ -1,9 +1,13 @@
 package tech.qizz.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,17 +20,21 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+
+import jakarta.persistence.*;
+
 import java.util.Date;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import lombok.*;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import tech.qizz.core.entity.constant.QuizState;
 
 @Entity
 @Table(name = "quizzes")
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Quiz {
@@ -36,18 +44,15 @@ public class Quiz {
     @Column(name = "quiz_id")
     private long quizId;
 
-    @Column(name = "mode", nullable = false)
-    private String mode;
-
     @Column(name = "name", nullable = false)
     private String name;
 
     @Lob
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
 
     @Lob
-    @Column(name = "featured_image", nullable = false)
+    @Column(name = "featured_image")
     private String featuredImage;
 
     @Column(name = "created_at")
@@ -58,10 +63,15 @@ public class Quiz {
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifiedAt;
 
+    @Column(name = "quiz_state", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private QuizState quizState;
+
     @PrePersist
     protected void onCreate() {
         createdAt = new Date();
         modifiedAt = createdAt;
+        quizState = QuizState.WAITING;
     }
 
     @PreUpdate
@@ -69,20 +79,11 @@ public class Quiz {
         modifiedAt = new Date();
     }
 
-    @Column(name = "publish", nullable = false)
-    private String publish;
-
-    @Column(name = "accessed_group")
-    private Boolean accessedGroup;
-
     @Column(name = "code", nullable = false)
-    private long code;
-
-    @Column(name = "total_joined", nullable = false)
-    private long totalJoined;
+    private String code;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "quiz", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<QuizSetting> quizSettings;
 
     @ManyToOne
@@ -98,7 +99,7 @@ public class Quiz {
     private List<QuizJoinedUser> quizJoinedUsers;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<QuizQuestion> quizQuestions;
 
 }
