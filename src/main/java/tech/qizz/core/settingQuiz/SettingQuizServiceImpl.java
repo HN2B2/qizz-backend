@@ -24,18 +24,17 @@ public class SettingQuizServiceImpl implements SettingQuizService {
     private final QuizRepository quizRepository;
 
 
-    private static final Map<String, String> KEY_REGEX_MAP = Map.ofEntries(
-            Map.entry("setTime","^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$"),
-            Map.entry("attempt","^[^\\/:*?\\\"<>|]+$"),
-            Map.entry("showAnswersDuringAct","^(true|false)$"),
-            Map.entry("showAnswersAfterAct","^(true|false)$"),
-            Map.entry("shuffleQuestions","^(true|false)$"),
-            Map.entry("shuffleAnswers","^(true|false)$"),
-            Map.entry("questionTimer","^(defaultTimer|off)$"),
-            Map.entry("skipQuestion","^(true|false)$"),
-            Map.entry("powerUp","^(true|false)$"),
-            Map.entry( "reactions","^(true|false)$"),
-            Map.entry( "showLeaderboard","^(true|false)$")
+    private static final Map<String, String> KEY_REGEX_MAP = Map.of(
+           "setTime","^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$",
+            "attempt","\\d{10}$",
+            "showAnswersDuringAct","^(true|false)$",
+            "showAnswersAfterAct","^(true|false)$",
+            "shuffleQuestions","^(true|false)$",
+            "shuffleAnswers","^(true|false)$",
+            "skipQuestion","^(true|false)$",
+            "powerUp","^(true|false)$",
+             "reactions","^(true|false)$",
+             "showLeaderboard","^(true|false)$"
     );
 
     private boolean isValidMetadata(SettingQuizMetadataRequest metadata) {

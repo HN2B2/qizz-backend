@@ -9,6 +9,12 @@ import lombok.Setter;
 import tech.qizz.core.entity.Quiz;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.entity.constant.QuizState;
+import tech.qizz.core.settingQuiz.dto.SettingQuizMetadataRespone;
+import tech.qizz.core.user.dto.UserMetadataResponse;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -35,11 +41,14 @@ public class QuizResponse {
     @JsonProperty("quizState")
     private QuizState quizState;
 
-    @JsonProperty("created_by")
+    @JsonProperty("createdBy")
     private Long createdBy;
 
-    @JsonProperty("bank_id")
+    @JsonProperty("bankId")
     private Long bankId;
+
+    @JsonProperty("metadata")
+    private List<SettingQuizMetadataRespone> metadata;
     public static QuizResponse of(Quiz quiz) {
         return QuizResponse
             .builder()
@@ -51,6 +60,11 @@ public class QuizResponse {
             .quizState(quiz.getQuizState())
                 .createdBy(quiz.getCreatedBy().getUserId())
             .bankId(quiz.getQuizBank().getQuizBankId())
+                .metadata(
+                        Optional.ofNullable(quiz.getQuizSettings())
+                                .map(metadatas -> metadatas.stream().map(SettingQuizMetadataRespone::of).toList())
+                                .orElse(Collections.emptyList())
+                )
             .build();
     }
 }

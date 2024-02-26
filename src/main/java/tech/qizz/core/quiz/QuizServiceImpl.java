@@ -10,6 +10,7 @@ import tech.qizz.core.entity.User;
 import tech.qizz.core.entity.constant.QuizState;
 import tech.qizz.core.exception.NotFoundException;
 import tech.qizz.core.manageUser.UserRepository;
+import tech.qizz.core.manageUser.dto.UsersResponse;
 import tech.qizz.core.quiz.dto.CreateQuizRequest;
 import tech.qizz.core.quiz.dto.QuizResponse;
 
@@ -20,8 +21,25 @@ public class QuizServiceImpl implements QuizService {
     private final QuizRepository quizRepository;
     private final BankRepository bankRepository;
     private final UserRepository userRepository;
-    @Override
 
+
+    @Override
+    public QuizResponse getQuizById(Long quizId) {
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(
+            () -> new NotFoundException("Quiz with not found")
+        );
+        return QuizResponse.of(quiz);
+    }
+
+    @Override
+    public QuizResponse getQuizByCode(String quizCode) {
+        Quiz quiz = quizRepository.findByCode(quizCode).orElseThrow(
+                () -> new NotFoundException("Quiz with not found")
+        );
+        return QuizResponse.of(quiz);
+    }
+
+    @Override
     public QuizResponse createQuiz(Long bankId,Long createdBy, CreateQuizRequest body) {
         String randomNumeric = "";
         boolean exists = false;
@@ -47,11 +65,5 @@ public class QuizServiceImpl implements QuizService {
         return QuizResponse.of(quizRepository.save(quiz));
     }
 
-    @Override
-    public QuizResponse getQuizByCode(String quizCode) {
-        Quiz quiz = quizRepository.findByCode(quizCode).orElseThrow(
-            () -> new NotFoundException("Quiz with not found")
-        );
-        return QuizResponse.of(quiz);
-    }
+
 }
