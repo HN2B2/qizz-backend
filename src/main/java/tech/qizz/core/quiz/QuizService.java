@@ -7,5 +7,7 @@ public interface QuizService {
 
     public QuizResponse getQuizByCode(String quizCode);
 
+public QuizResponse getQuizById(Long quizId);
+
     public QuizResponse createQuiz(Long bankId, Long createdBy, CreateQuizRequest body);
 }

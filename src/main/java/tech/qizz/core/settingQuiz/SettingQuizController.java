@@ -16,13 +16,8 @@ import tech.qizz.core.settingQuiz.dto.SettingQuizRespone;
 @CrossOrigin
 public class SettingQuizController {
     private final SettingQuizService settingQuizService;
-    @GetMapping("{quiz_id}/live_quiz")
-    @PreAuthorize("hasAnyAuthority('USER', 'STAFF', 'ADMIN')")
-    public ResponseEntity<SettingQuizRespone> getSettingQuiz(@PathVariable("quiz_id") Long id) {
-        return new ResponseEntity<>( HttpStatus.OK);
-    }
 
-    @PostMapping("{quiz_id}/live_quiz")
+    @PutMapping("live_quiz/{quiz_id}")
     @PreAuthorize("hasAnyAuthority('USER', 'STAFF', 'ADMIN')")
     public ResponseEntity<SettingQuizRespone> settingQuiz(@PathVariable("quiz_id") Long quizId, @Valid @RequestBody SettingQuizRequest body){
         return new ResponseEntity<>( settingQuizService.settingQuiz(quizId, body),HttpStatus.CREATED);
