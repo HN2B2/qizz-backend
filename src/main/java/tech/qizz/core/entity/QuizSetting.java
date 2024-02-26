@@ -28,11 +28,11 @@ public class QuizSetting {
     private long quizSettingId;
 
     @Lob
-    @Column(name = "`key`", columnDefinition = "TEXT")
+    @Column(name = "`key`")
     private String key;
 
     @Lob
-    @Column(name = "`value`", columnDefinition = "TEXT")
+    @Column(name = "`value`")
     private String value;
 
     @ManyToOne
