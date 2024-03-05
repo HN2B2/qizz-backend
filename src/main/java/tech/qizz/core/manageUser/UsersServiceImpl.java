@@ -1,5 +1,6 @@
 package tech.qizz.core.manageUser;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -13,6 +14,7 @@ import tech.qizz.core.entity.User;
 import tech.qizz.core.entity.constant.UserRole;
 import tech.qizz.core.exception.ConflictException;
 import tech.qizz.core.exception.NotFoundException;
+import tech.qizz.core.manageBank.dto.CreateManageBankRequest;
 import tech.qizz.core.manageUser.dto.CreateUserRequest;
 import tech.qizz.core.manageUser.dto.GetAllUserResponse;
 import tech.qizz.core.manageUser.dto.UpdateUserRequest;
@@ -93,10 +95,12 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public GetAllUserResponse getAllUserEmails(String keyword) {
+    public GetAllUserResponse getAllUserEmails(String keyword, User user, List<String> manageBanks) {
         Pageable pageable = PageRequest.of(0, 5);
         Page<User> users = userRepository.findUserEmailsByKeyword(
                 keyword,
+                user.getEmail(),
+                manageBanks,
                 pageable
         );
         return GetAllUserResponse.of(users);

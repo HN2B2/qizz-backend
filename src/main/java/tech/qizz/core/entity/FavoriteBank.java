@@ -29,13 +29,6 @@ public class FavoriteBank {
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifiedAt;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "bank_id",referencedColumnName = "quiz_bank_id")
-    private QuizBank quizBank;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id",referencedColumnName = "user_id")
-    private User user;
 
     @PrePersist
     protected void onCreate() {
