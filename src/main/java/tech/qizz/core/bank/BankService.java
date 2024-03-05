@@ -7,7 +7,7 @@ import tech.qizz.core.manageSubCategory.dto.CreateSubCategoryRequest;
 import java.util.List;
 
 public interface BankService {
-    public BankResponse getBankResponseById(Long id);
+    public BankResponse getBankResponseById(Long id, User user);
     public BankResponse saveBank(CreateBankRequest bank, User user);
     public BankResponse updateBank(Long id, UpdateBankRequest bank, User user);
 
@@ -30,4 +30,12 @@ public interface BankService {
     );
 
     public List<BanksByCategoryResponse> getListBanksByCategories(Long top);
+
+    public UpvoteResponse isUpvoted(Long id, User user);
+
+    public UpvoteResponse updateUpvote(Long id, User user);
+
+    public FavoriteResponse isFavorite(Long id, User user);
+
+    public FavoriteResponse updateFavorite(Long id, User user);
 }

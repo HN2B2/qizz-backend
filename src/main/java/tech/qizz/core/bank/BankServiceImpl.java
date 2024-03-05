@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import tech.qizz.core.bank.dto.*;
 import tech.qizz.core.entity.*;
+import tech.qizz.core.exception.ForbiddenException;
 import tech.qizz.core.exception.NotFoundException;
 import tech.qizz.core.manageBank.ManageBankRepository;
 import tech.qizz.core.manageBank.dto.CreateManageBankRequest;
@@ -35,30 +36,30 @@ public class BankServiceImpl implements BankService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public BankResponse getBankResponseById(Long id) {
+    public BankResponse getBankResponseById(Long id, User user) {
         Optional<QuizBank> bank = bankRepository.findById(id);
-        return bank.map(BankResponse::of)
-            .orElseThrow(() -> new NotFoundException("Bank not found"));
+        BankResponse bankResponse = bank.map(BankResponse::of)
+                .orElseThrow(() -> new NotFoundException("Bank not found"));
+        boolean kt=false;
+        if (bankResponse.getQuizPublicity()) {
+            kt=true;
+        }
+        if (bankResponse.getManageBanks().stream().map(manageBankResponse -> manageBankResponse.getUser().getId()).toList().contains(user.getUserId())) {
+            kt=true;
+        }
+        if (!kt) {
+            throw new ForbiddenException("You don't have permission to access this bank");
+        }
+        return bankResponse;
     }
 
     public BankResponse saveBank(CreateBankRequest bank, User user) {
-//        bank.getManageUsers().stream().map
-//        Optional<ManageBank> manageBank = manageBankRepository.save()
-
-//        Set<User> manageUsers = bank
-//                .getManageUsers()
-//                .stream()
-//                .map((manageUser) -> userRepository.findByEmail(manageUser.getEmail())
-//                        .orElseThrow(() -> new NotFoundException("Email " + manageUser.getEmail() + " not found")))
-//                .collect(Collectors.toSet());
+        //check if bank exists
         bank.getManageBanks().stream().map(
             (manageBank) -> userRepository.findByEmail(manageBank.getEmail()).orElseThrow(
                 () -> new NotFoundException("Email " + manageBank.getEmail() + " not found")));
 
-//        bank.getSubCategories().stream().map(
-//            (subCategory) -> subCategoryRepository.findById(subCategory).orElseThrow(
-//                () -> new NotFoundException("Category " + subCategory + " not found"))
-//        );
+
         QuizBank savedBank = QuizBank.builder()
             .name(bank.getName())
             .description(bank.getDescription())
@@ -71,6 +72,21 @@ public class BankServiceImpl implements BankService {
 //                .subCategories(null)
 //            .subCategories((Set<SubCategory>) bank.getSubCategories().stream().map((subCategory) -> subCategoryRepository.findById(subCategory)))
             .build();
+
+//        boolean kt=false;
+//        if (savedBank.getQuizPublicity() && savedBank.getPublicEditable()) {
+//            kt=true;
+//        }
+//        for (ManageBank manageBank : savedBank.getManageBanks()) {
+//            if (manageBank.getUser().getUserId()==user.getUserId() && manageBank.getEditable()) {
+//                kt=true;
+//                break;
+//            }
+//        }
+//        if (!kt) {
+//            throw new ForbiddenException("You don't have permission to edit this bank");
+//        }
+
         QuizBank newBank = bankRepository.save(savedBank);
         List<ManageBank> manageBankss = new ArrayList<ManageBank>();
         for (CreateManageBankRequest manageBank : bank.getManageBanks()) {
@@ -83,7 +99,6 @@ public class BankServiceImpl implements BankService {
         }
         ;
         newBank.setManageBanks(manageBankss);
-//        System.out.println(newBank.getManageBanks());
 
         return BankResponse.of(newBank);
     }
@@ -92,6 +107,19 @@ public class BankServiceImpl implements BankService {
     public BankResponse updateBank(Long id, UpdateBankRequest bank, User user) {
         QuizBank oldBank = bankRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Bank not found"));
+        boolean kt=false;
+        if (oldBank.getQuizPublicity() && oldBank.getPublicEditable()) {
+            kt=true;
+        }
+        for (ManageBank manageBank : oldBank.getManageBanks()) {
+            if (manageBank.getUser().getUserId()==user.getUserId() && manageBank.getEditable()) {
+                kt=true;
+                break;
+            }
+        }
+        if (!kt) {
+            throw new ForbiddenException("You don't have permission to edit this bank");
+        }
 
         bank.getManageBanks().stream().map(
             (manageBank) -> userRepository.findByEmail(manageBank.getEmail()).orElseThrow(
@@ -118,10 +146,16 @@ public class BankServiceImpl implements BankService {
         return BankResponse.of(bankRepository.save(oldBank));
     }
 
+    //owner, staff, admin
     @Override
     public void deleteBank(Long id, User user) {
         QuizBank bank = bankRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Bank not found"));
+
+        if (bank.getCreatedBy().getUserId()!=user.getUserId()) {
+            throw new ForbiddenException("You don't have permission to delete this bank");
+        }
+
         bankRepository.delete(bank);
     }
 
@@ -129,6 +163,21 @@ public class BankServiceImpl implements BankService {
     public BankResponse updateSubCategoryToBank(Long id, CreateSubCategoryToBankRequest subCategories, User user) {
         QuizBank bank = bankRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Bank not found"));
+
+        boolean kt=false;
+        if (bank.getQuizPublicity() && bank.getPublicEditable()) {
+            kt=true;
+        }
+        for (ManageBank manageBank : bank.getManageBanks()) {
+            if (manageBank.getUser().getUserId()==user.getUserId() && manageBank.getEditable()) {
+                kt=true;
+                break;
+            }
+        }
+        if (!kt) {
+            throw new ForbiddenException("You don't have permission to edit this bank");
+        }
+
         bank.setSubCategories(subCategoryRepository.findAllById(subCategories.getSubCategories()).stream().collect(Collectors.toSet()));
         return BankResponse.of(bankRepository.save(bank));
     }
@@ -137,6 +186,21 @@ public class BankServiceImpl implements BankService {
     public BankResponse addSubCategoryToBank(Long id, CreateSubCategoryToBankRequest subCategories, User user) {
         QuizBank bank = bankRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Bank not found"));
+
+        boolean kt=false;
+        if (bank.getQuizPublicity() && bank.getPublicEditable()) {
+            kt=true;
+        }
+        for (ManageBank manageBank : bank.getManageBanks()) {
+            if (manageBank.getUser().getUserId()==user.getUserId() && manageBank.getEditable()) {
+                kt=true;
+                break;
+            }
+        }
+        if (!kt) {
+            throw new ForbiddenException("You don't have permission to edit this bank");
+        }
+
 //        bank.setSubCategories(subCategoryRepository.findAllById(subCategories.getSubCategories()).stream().collect(Collectors.toSet()));
         bank.getSubCategories().addAll(subCategoryRepository.findAllById(subCategories.getSubCategories()));
 //        subCategories.getSubCategories().forEach((subCategory) -> bank.getSubCategories().add(subCategoryRepository.findById(subCategory).get()));
@@ -172,5 +236,55 @@ public class BankServiceImpl implements BankService {
             banksByCategoryResponses.add(new BanksByCategoryResponse(CategoryResponse.of(category), banks.stream().map(BankResponse::of).toList()));
         });
         return banksByCategoryResponses;
+    }
+
+    @Override
+    public UpvoteResponse isUpvoted(Long id, User user) {
+        QuizBank bank = bankRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Bank not found"));
+        if (bank.getUpVoteUsers().stream().anyMatch(u -> u.getUserId() == user.getUserId())) {
+            return new UpvoteResponse(true);
+        }
+        return new UpvoteResponse(false);
+    }
+
+    @Override
+    public UpvoteResponse updateUpvote(Long id, User user) {
+        QuizBank bank = bankRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Bank not found"));
+        User u = userRepository.findById(user.getUserId()).orElseThrow(() -> new NotFoundException("User not found"));
+        if (bank.getUpVoteUsers().contains(u)) {
+            bank.getUpVoteUsers().remove(u);
+            bankRepository.save(bank);
+            return new UpvoteResponse(false);
+        }
+        bank.getUpVoteUsers().add(u);
+        bankRepository.save(bank);
+        return new UpvoteResponse(true);
+    }
+
+    @Override
+    public FavoriteResponse isFavorite(Long id, User user) {
+        QuizBank bank = bankRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Bank not found"));
+        if (bank.getFavoriteUsers().stream().anyMatch(u -> u.getUserId() == user.getUserId())) {
+            return new FavoriteResponse(true);
+        }
+        return new FavoriteResponse(false);
+    }
+
+    @Override
+    public FavoriteResponse updateFavorite(Long id, User user) {
+        QuizBank bank = bankRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Bank not found"));
+        User u = userRepository.findById(user.getUserId()).orElseThrow(() -> new NotFoundException("User not found"));
+        if (bank.getFavoriteUsers().contains(u)) {
+            bank.getFavoriteUsers().remove(u);
+            bankRepository.save(bank);
+            return new FavoriteResponse(false);
+        }
+        bank.getFavoriteUsers().add(u);
+        bankRepository.save(bank);
+        return new FavoriteResponse(true);
     }
 }

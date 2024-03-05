@@ -15,12 +15,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import tech.qizz.core.annotation.RequestUser;
+import tech.qizz.core.entity.User;
 import tech.qizz.core.entity.constant.UserRole;
 import tech.qizz.core.exception.BadRequestException;
+import tech.qizz.core.manageBank.dto.CreateManageBankRequest;
 import tech.qizz.core.manageUser.dto.CreateUserRequest;
 import tech.qizz.core.manageUser.dto.GetAllUserResponse;
 import tech.qizz.core.manageUser.dto.UpdateUserRequest;
 import tech.qizz.core.manageUser.dto.UsersResponse;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -57,11 +62,13 @@ public class UsersController {
     @GetMapping("/email")
     @PreAuthorize("hasAnyAuthority('STAFF', 'ADMIN', 'USER')")
     public ResponseEntity<GetAllUserResponse> getAllUserEmailsByKeyword(
-            @RequestParam(required = false, defaultValue = "") String keyword
-    ) {
-        GetAllUserResponse user = usersService.getAllUserEmails(keyword);
+            @RequestParam(required = false, defaultValue = "") String keyword,
+            @RequestUser User user,
+            @RequestParam(required = false) List<String> manageBanks
+            ) {
+        GetAllUserResponse users = usersService.getAllUserEmails(keyword, user, manageBanks);
 
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

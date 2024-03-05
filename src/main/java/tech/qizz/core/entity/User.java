@@ -123,9 +123,13 @@ public class    User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<QuizJoinedUser> quizJoinedUsers;
 
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<FavoriteBank> favoriteBanks;
+
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<FavoriteBank> favoriteBanks;
+    @ManyToMany(mappedBy = "favoriteUsers", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<QuizBank> intermediateFavoriteQuizBanks;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

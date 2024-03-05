@@ -95,6 +95,8 @@ public interface BankRepository extends JpaRepository<QuizBank, Long> {
 @Query("SELECT DISTINCT b FROM QuizBank b " +
         "LEFT JOIN b.subCategories subcat " +
         "LEFT JOIN b.manageBanks mb " +
+        "LEFT JOIN b.upVoteUsers upv " +
+        "LEFT JOIN b.favoriteUsers lik " +
         "WHERE " +
         "(" +
         "b.name LIKE CONCAT('%', :keyword, '%') AND " +
@@ -106,7 +108,9 @@ public interface BankRepository extends JpaRepository<QuizBank, Long> {
         ":tab IS NULL OR " +
         "(:tab = 'created' AND b.createdBy = :user) OR " +
         "(:tab = 'shared' AND EXISTS (SELECT 1 FROM b.manageBanks mb WHERE :user IN (mb.user))) OR " +
-        "(:tab = 'all' AND (b.createdBy = :user OR EXISTS (SELECT 1 FROM b.manageBanks mb WHERE :user IN (mb.user))))" +
+        "(:tab = 'upvoted' AND :user = upv) OR " +
+        "(:tab = 'liked' AND :user = lik) OR " +
+        "(:tab = 'all' AND (b.createdBy = :user OR EXISTS (SELECT 1 FROM b.manageBanks mb WHERE :user IN (mb.user)) OR :user = upv OR :user = lik))" +
         ")" +
         ")"
 )

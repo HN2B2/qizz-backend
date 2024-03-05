@@ -20,10 +20,9 @@ import java.util.List;
 public class BankController {
 
     private BankService bankService;
-    private UserService userService;
     @GetMapping("/{id}")
-    public ResponseEntity<BankResponse> getBankResponseById(@PathVariable Long id) {
-        BankResponse bank = bankService.getBankResponseById(id);
+    public ResponseEntity<BankResponse> getBankResponseById(@PathVariable Long id, @RequestUser User user) {
+        BankResponse bank = bankService.getBankResponseById(id, user);
         return new ResponseEntity<>(bank, HttpStatus.OK);
     }
 
@@ -91,6 +90,30 @@ public class BankController {
     public ResponseEntity<List<BanksByCategoryResponse>> getListBanksByCategories(@PathVariable Long top) {
         List<BanksByCategoryResponse> banks = bankService.getListBanksByCategories(top);
         return new ResponseEntity<>(banks,HttpStatus.OK);
+    }
+
+    @GetMapping("/upvote/{id}")
+    public ResponseEntity<UpvoteResponse> isUpvoted(@PathVariable Long id, @RequestUser User user) {
+        UpvoteResponse upvote = bankService.isUpvoted(id, user);
+        return new ResponseEntity<>(upvote, HttpStatus.OK);
+    }
+
+    @PutMapping("/upvote/{id}")
+    public ResponseEntity<UpvoteResponse> updateUpvote(@PathVariable Long id, @RequestUser User user) {
+        UpvoteResponse upvote = bankService.updateUpvote(id, user);
+        return new ResponseEntity<>(upvote, HttpStatus.OK);
+    }
+
+    @GetMapping("/favorite/{id}")
+    public ResponseEntity<FavoriteResponse> isFavorite(@PathVariable Long id, @RequestUser User user) {
+        FavoriteResponse favorite = bankService.isFavorite(id, user);
+        return new ResponseEntity<>(favorite, HttpStatus.OK);
+    }
+
+    @PutMapping("/favorite/{id}")
+    public ResponseEntity<FavoriteResponse> updateFavorite(@PathVariable Long id, @RequestUser User user) {
+        FavoriteResponse favorite = bankService.updateFavorite(id, user);
+        return new ResponseEntity<>(favorite, HttpStatus.OK);
     }
 
 }
