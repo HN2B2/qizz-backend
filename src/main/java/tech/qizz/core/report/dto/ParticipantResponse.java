@@ -14,6 +14,7 @@ import tech.qizz.core.entity.QuestionHistory;
 @AllArgsConstructor
 public class ParticipantResponse {
 
+    private long id;
     private String displayName;
     private long score;
     private double answerTime;
@@ -23,6 +24,7 @@ public class ParticipantResponse {
         boolean isCorrect = questionHistory.getQuizQuestion().getQuestion()
             .getCorrectAnswersMetadata().equals(questionHistory.getAnswerMetadata());
         return ParticipantResponse.builder()
+            .id(questionHistory.getQuizJoinedUser().getUser().getUserId())
             .displayName(questionHistory.getQuizJoinedUser().getUser().getDisplayName())
             .score(questionHistory.getScore())
             .answerTime(questionHistory.getAnswerTime())
