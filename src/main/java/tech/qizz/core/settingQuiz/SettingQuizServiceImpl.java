@@ -23,10 +23,8 @@ import java.util.Map;
 public class SettingQuizServiceImpl implements SettingQuizService {
     private final QuizRepository quizRepository;
 
-
     private static final Map<String, String> KEY_REGEX_MAP = Map.of(
-           "setTime","^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$",
-            "attempt","\\d{10}$",
+            "attempt","^[1-5]{1}$|Unlimited",
             "showAnswersDuringAct","^(true|false)$",
             "showAnswersAfterAct","^(true|false)$",
             "shuffleQuestions","^(true|false)$",
@@ -54,6 +52,11 @@ public class SettingQuizServiceImpl implements SettingQuizService {
     public SettingQuizRespone settingQuiz(Long id, SettingQuizRequest body) {
         Quiz quiz = quizRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Quiz not found"));
+        body.getMetadata().forEach(metadata -> {
+            if (!isValidMetadata(metadata)) {
+                throw new BadRequestException("Invalid metadata");
+            }
+        });
         body.getMetadata().forEach(metadata -> settingQuizMetadata(quiz, metadata));
         return SettingQuizRespone.of(quizRepository.save(quiz));
     }
