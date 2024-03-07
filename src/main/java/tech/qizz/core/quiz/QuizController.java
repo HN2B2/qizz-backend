@@ -21,14 +21,16 @@ public class QuizController {
 
     private final QuizService quizService;
 
-    @GetMapping("code/{quiz_code}")
-    public ResponseEntity<QuizResponse> getQuizByQuizCode(@PathVariable("quiz_code") String quizCode) {
-        return new ResponseEntity<>(quizService.getQuizByCode(quizCode), HttpStatus.OK);
+    @GetMapping
+    @PreAuthorize("hasAnyAuthority('USER', 'STAFF', 'ADMIN')")
+    public ResponseEntity<QuizResponse> getQuizByQuizCode(@RequestParam String code) {
+        return new ResponseEntity<>(quizService.getQuizByCode(code), HttpStatus.OK);
     }
 
-    @GetMapping("id/{quiz_id}")
-    public ResponseEntity<QuizResponse> getQuizByQuizID(@PathVariable("quiz_id")  Long quizId) {
-        return new ResponseEntity<>(quizService.getQuizById(quizId), HttpStatus.OK);
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('USER', 'STAFF', 'ADMIN')")
+    public ResponseEntity<QuizResponse> getQuizByQuizID(@PathVariable Long id) {
+        return new ResponseEntity<>(quizService.getQuizById(id), HttpStatus.OK);
     }
 
 
