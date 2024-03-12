@@ -9,7 +9,13 @@ import tech.qizz.core.manageNotifications.dto.UpdateNotificationRequest;
 
 public interface ManageNotificationsService {
 
-    public GetAllNotificationsResponse getAllNotifications(Integer page, Integer limit, String keyword, NotificationTargetType target, String order, String sort);
+    public GetAllNotificationsResponse getAllNotifications(
+            Integer page,
+            Integer limit,
+            String keyword,
+            NotificationTargetType target,
+            String order,
+            String sort);
 
     public NotificationResponse getNotificationById(Long id);
 

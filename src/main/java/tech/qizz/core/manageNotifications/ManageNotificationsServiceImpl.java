@@ -25,11 +25,20 @@ public class ManageNotificationsServiceImpl implements ManageNotificationsServic
     private final UserRepository userRepository;
     private  final ManageNotificationsRepository manageNotificationsRepository;
     @Override
-    public GetAllNotificationsResponse getAllNotifications(Integer page, Integer limit, String keyword, NotificationTargetType target, String order, String sort) {
+    public GetAllNotificationsResponse getAllNotifications(
+            Integer page,
+            Integer limit,
+            String keyword,
+            NotificationTargetType target,
+            String order,
+            String sort) {
         Sort sortType = sort.equalsIgnoreCase("asc") ? Sort.by(order) : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page - 1, limit, sortType);
 
-        Page<Notification> notifications = manageNotificationsRepository.findNotificationsByKeywordAndTarget(keyword, target, pageable);
+        Page<Notification> notifications = manageNotificationsRepository.findNotificationsByKeywordAndTarget(
+                keyword,
+                target,
+                pageable);
         return GetAllNotificationsResponse.of(notifications);
     }
 
