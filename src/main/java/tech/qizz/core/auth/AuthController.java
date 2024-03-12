@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tech.qizz.core.auth.dto.AuthResponse;
+import tech.qizz.core.auth.dto.CheckResetTokenRequest;
 import tech.qizz.core.auth.dto.CreateGuestRequest;
+import tech.qizz.core.auth.dto.ForgotPasswordRequest;
 import tech.qizz.core.auth.dto.LoginRequest;
 import tech.qizz.core.auth.dto.RegisterRequest;
+import tech.qizz.core.auth.dto.ResetPasswordRequest;
 import tech.qizz.core.auth.dto.VerifyRequest;
 import tech.qizz.core.exception.BadRequestException;
 
@@ -62,6 +65,42 @@ public class AuthController {
             throw new BadRequestException("Invalid token");
         }
         return new ResponseEntity<>(authService.verify(body, response), HttpStatus.OK);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<HttpStatus> forgotPassword(
+        @Valid @RequestBody ForgotPasswordRequest body,
+        BindingResult result
+    ) throws MessagingException, UnsupportedEncodingException {
+        if (result.hasErrors() || body == null) {
+            throw new BadRequestException("Invalid email");
+        }
+        authService.forgotPassword(body);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/check-reset-token")
+    public ResponseEntity<HttpStatus> checkResetToken(
+        @Valid @RequestBody CheckResetTokenRequest body,
+        BindingResult result
+    ) {
+        if (result.hasErrors() || body == null) {
+            throw new BadRequestException("Invalid token");
+        }
+        authService.checkResetToken(body);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<AuthResponse> resetPassword(
+        @Valid @RequestBody ResetPasswordRequest body,
+        BindingResult result,
+        HttpServletResponse response
+    ) {
+        if (result.hasErrors() || body == null) {
+            throw new BadRequestException("Invalid request");
+        }
+        return new ResponseEntity<>(authService.resetPassword(body, response), HttpStatus.OK);
     }
 
     @PostMapping("/create-guest")
