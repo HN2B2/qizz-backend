@@ -24,6 +24,7 @@ public class Notification {
     @Column(name = "notification_id")
     private long notificationId;
 
+
     @Column(name = "title", nullable = false)
     private String title;
 
@@ -57,4 +58,10 @@ public class Notification {
     @JsonIgnore
     @OneToMany(mappedBy = "notification", cascade = CascadeType.ALL)
     private List<UserNotification> userNotifications;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "created_by", referencedColumnName = "user_id")
+    private User createdBy;
+
 }
