@@ -1,9 +1,6 @@
 package tech.qizz.core.bank;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
@@ -12,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 import tech.qizz.core.bank.dto.*;
 import tech.qizz.core.entity.*;
@@ -23,6 +21,7 @@ import tech.qizz.core.manageCategory.CategoryRepository;
 import tech.qizz.core.manageCategory.dto.CategoryResponse;
 import tech.qizz.core.manageSubCategory.SubCategoryRepository;
 import tech.qizz.core.manageUser.UserRepository;
+import tech.qizz.core.question.QuestionRepository;
 
 @AllArgsConstructor
 @Service
@@ -34,6 +33,7 @@ public class BankServiceImpl implements BankService {
     private SubCategoryRepository subCategoryRepository;
     private final ModelMapper modelMapper;
     private final CategoryRepository categoryRepository;
+    private final QuestionRepository questionRepository;
 
     @Override
     public BankResponse getBankResponseById(Long id, User user) {
@@ -286,5 +286,62 @@ public class BankServiceImpl implements BankService {
         bank.getFavoriteUsers().add(u);
         bankRepository.save(bank);
         return new FavoriteResponse(true);
+    }
+
+    @Override
+    public BankResponse duplicateBank(Long id, User user) {
+        QuizBank bank = bankRepository.findById(id).orElseThrow(() -> new NotFoundException("Bank not found"));
+
+        boolean kt=false;
+        if (bank.getQuizPublicity()) {
+            kt=true;
+        }
+        if (bank.getManageBanks().stream().map(manageBankResponse -> manageBankResponse.getUser().getUserId()).toList().contains(user.getUserId())) {
+            kt=true;
+        }
+        if (!kt) {
+            throw new ForbiddenException("You don't have permission to duplicate this bank");
+        }
+        //duplicate this bank
+        QuizBank newBank = new QuizBank();
+        newBank.setName(bank.getName());
+        newBank.setDescription(bank.getDescription());
+        newBank.setSubCategories(new HashSet<>(bank.getSubCategories()));
+
+        newBank.setQuizPublicity(true);
+        List<ManageBank> manageBankss = new ArrayList<ManageBank>();
+        newBank.setManageBanks(manageBankss);
+        newBank.setPublicEditable(true);
+        newBank.setDraft(true);
+        newBank.setCreatedBy(user);
+        newBank.setModifiedBy(user);
+
+        // Save the duplicated bank to get its ID
+        newBank = bankRepository.save(newBank);
+
+        List<Question> originalQuestions = bank.getQuestions();
+        List<Question> newQuestions = new ArrayList<>();
+
+        for (Question originalQuestion : originalQuestions) {
+            Question newQuestion = modelMapper.map(originalQuestion, Question.class);
+            // You may need to reset any ID or other properties as needed
+            newQuestions.add(newQuestion);
+        }
+
+// Associate the duplicated questions with the new bank
+        for (Question newQuestion : newQuestions) {
+            newQuestion.setQuizBank(newBank);
+        }
+
+// Save the duplicated questions
+        newQuestions = questionRepository.saveAll(newQuestions);
+
+// Set the duplicated questions to the new bank
+        newBank.setQuestions(newQuestions);
+
+// Save the updated bank with duplicated questions
+        newBank = bankRepository.save(newBank);
+
+        return BankResponse.of(bankRepository.save(newBank));
     }
 }
