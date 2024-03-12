@@ -29,6 +29,8 @@ public class ProfileResponse {
     private String displayName;
     @JsonProperty("role")
     private UserRole role;
+    @JsonProperty("enabled")
+    private boolean enabled;
     @JsonProperty("metadata")
     private List<UserMetadataResponse> metadata;
 
@@ -39,6 +41,7 @@ public class ProfileResponse {
             .email(user.getEmail())
             .displayName(user.getDisplayName())
             .role(user.getRole())
+            .enabled(user.getEnabled())
             .metadata(
                 Optional.ofNullable(user.getUserMetadatas())
                     .map(metadatas -> metadatas.stream().map(UserMetadataResponse::of).toList())
