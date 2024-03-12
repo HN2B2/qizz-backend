@@ -18,6 +18,7 @@ public class ParticipantResponse {
     private String displayName;
     private long score;
     private double answerTime;
+    private String answerMetadata;
     private boolean isCorrect;
 
     public static ParticipantResponse of(QuestionHistory questionHistory) {
@@ -28,6 +29,7 @@ public class ParticipantResponse {
             .displayName(questionHistory.getQuizJoinedUser().getUser().getDisplayName())
             .score(questionHistory.getScore())
             .answerTime(questionHistory.getAnswerTime())
+            .answerMetadata(questionHistory.getAnswerMetadata())
             .isCorrect(isCorrect)
             .build();
 
