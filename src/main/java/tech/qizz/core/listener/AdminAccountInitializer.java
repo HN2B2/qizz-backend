@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.entity.constant.UserRole;
 import tech.qizz.core.manageUser.UserRepository;
-import tech.qizz.core.util.Helper;
 
 @Component
 @RequiredArgsConstructor
@@ -18,7 +17,6 @@ public class AdminAccountInitializer implements ApplicationListener<ContextRefre
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final Helper helper;
 
     private String randomPassword() {
         String lowerCase = "abcdefghijklmnopqrstuvwxyz";
@@ -47,12 +45,11 @@ public class AdminAccountInitializer implements ApplicationListener<ContextRefre
         if (!adminExists) {
             String adminUsername = "admin";
             String adminPassword = randomPassword();
-            String displayName = helper.generateUsername();
             User admin = User.builder()
                 .email(adminUsername + "@qizz.tech")
                 .username(adminUsername)
                 .password(passwordEncoder.encode(adminPassword))
-                .displayName(displayName)
+                .displayName("ADMIN")
                 .banned(false)
                 .enabled(true)
                 .role(UserRole.ADMIN)

@@ -41,7 +41,7 @@ import tech.qizz.core.entity.constant.UserRole;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class    User implements UserDetails {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,12 +79,15 @@ public class    User implements UserDetails {
     @Column(name = "enabled")
     private Boolean enabled;
 
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
+
     @PrePersist
     protected void onCreate() {
         createdAt = new Date();
         modifiedAt = createdAt;
         banned = false;
-        enabled = true;
+        enabled = false;
     }
 
     @PreUpdate

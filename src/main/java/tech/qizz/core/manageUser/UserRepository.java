@@ -10,7 +10,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.entity.constant.UserRole;
-import tech.qizz.core.manageBank.dto.CreateManageBankRequest;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -20,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
         "u.email LIKE CONCAT('%', :keyword, '%') OR " +
         "u.displayName LIKE CONCAT('%', :keyword, '%')) AND " +
         "(:role IS NULL OR u.role = :role) AND " +
-            "(u.role!='GUEST') AND "+
+        "(u.role!='GUEST') AND " +
         "(:banned IS NULL OR u.banned = :banned)"
     )
     Page<User> findUsersByKeywordAndRoleAndBanned(
@@ -31,15 +30,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
     );
 
     @Query("SELECT u FROM User u WHERE " +
-            "(u.email LIKE CONCAT('%', :keyword, '%') AND u.email!= :userEmail AND " +
-            " (:manageBanks IS NULL OR u.email NOT IN :manageBanks) AND " +
-            " (u.role != 'GUEST')) "
+        "(u.email LIKE CONCAT('%', :keyword, '%') AND u.email!= :userEmail AND " +
+        " (:manageBanks IS NULL OR u.email NOT IN :manageBanks) AND " +
+        " (u.role != 'GUEST')) "
     )
     Page<User> findUserEmailsByKeyword(
-            @Param("keyword") String keyword,
-            String userEmail,
-            @Param("manageBanks") List<String> manageBanks,
-            Pageable pageable
+        @Param("keyword") String keyword,
+        String userEmail,
+        @Param("manageBanks") List<String> manageBanks,
+        Pageable pageable
     );
 
     Optional<User> findByEmail(String email);
@@ -48,4 +47,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByUsernameOrEmail(String username, String email);
 
     boolean existsByRole(UserRole role);
+
+    @Query(value = "SELECT * FROM users u WHERE BINARY u.verification_code = :token", nativeQuery = true)
+    Optional<User> getUserByVerificationCode(@Param("token") String token);
 }

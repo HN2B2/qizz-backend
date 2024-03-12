@@ -1,7 +1,9 @@
 package tech.qizz.core.auth;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import java.io.UnsupportedEncodingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import tech.qizz.core.auth.dto.AuthResponse;
 import tech.qizz.core.auth.dto.CreateGuestRequest;
 import tech.qizz.core.auth.dto.LoginRequest;
 import tech.qizz.core.auth.dto.RegisterRequest;
+import tech.qizz.core.auth.dto.VerifyRequest;
 import tech.qizz.core.exception.BadRequestException;
 
 @RestController
@@ -38,15 +41,27 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(
+    public ResponseEntity<HttpStatus> register(
         @Valid @RequestBody RegisterRequest body,
+        BindingResult result
+    ) throws MessagingException, UnsupportedEncodingException {
+        if (result.hasErrors() || body == null) {
+            throw new BadRequestException("Invalid request");
+        }
+        authService.register(body);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<AuthResponse> verify(
+        @Valid @RequestBody VerifyRequest body,
         BindingResult result,
         HttpServletResponse response
     ) {
         if (result.hasErrors() || body == null) {
-            throw new BadRequestException("Invalid request");
+            throw new BadRequestException("Invalid token");
         }
-        return new ResponseEntity<>(authService.register(body, response), HttpStatus.CREATED);
+        return new ResponseEntity<>(authService.verify(body, response), HttpStatus.OK);
     }
 
     @PostMapping("/create-guest")

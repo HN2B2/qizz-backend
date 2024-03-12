@@ -28,6 +28,8 @@ services:
         "spring.jpa.hibernate.ddl-auto": "update",
         "cloudinary.url": "$CLOUDINARY_URL",
         "jwt.expiration": "604800000",
+        "spring.mail.username": "$MAIL_USERNAME",
+        "spring.mail.password": "$MAIL_PASSWORD",
         "client.url": "$CLIENT_URL"
       }'
     volumes:
