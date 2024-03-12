@@ -13,7 +13,7 @@ public interface ManageNotificationsService {
 
     public NotificationResponse getNotificationById(Long id);
 
-    public NotificationResponse createNotification(CreateNotificationRequest body);
+    public NotificationResponse createNotification(Long userId, CreateNotificationRequest body);
 
     public NotificationResponse updateNotification(Long id, UpdateNotificationRequest body);
 }

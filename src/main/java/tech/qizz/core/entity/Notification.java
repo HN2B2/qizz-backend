@@ -5,16 +5,15 @@ import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import lombok.*;
 import tech.qizz.core.entity.constant.NotificationTargetType;
 
 @Entity
 @Table(name = "notifications")
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Notification {

@@ -12,7 +12,8 @@ import tech.qizz.core.entity.constant.NotificationTargetType;
 @Repository
 public interface ManageNotificationsRepository extends JpaRepository<Notification, Long> {
     @Query("SELECT n FROM Notification n WHERE n.title LIKE CONCAT('%', :keyword, '%') OR n.content LIKE CONCAT('%', :keyword, '%')")
-    Page<Notification> findNotificationsByKeyword(@Param("keyword") String keyword, @Param("Target")NotificationTargetType target, Pageable pageable);
+    Page<Notification> findNotificationsByKeywordAndTarget(@Param("keyword") String keyword, @Param("Target")NotificationTargetType target, Pageable pageable);
+    boolean existsByTitle(String title);
 
-boolean existsByTitle(String title);
+boolean existsByTargetType(NotificationTargetType targetType);
 }
