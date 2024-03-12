@@ -82,6 +82,9 @@ public class User implements UserDetails {
     @Column(name = "verification_code", length = 64)
     private String verificationCode;
 
+    @Column(name = "forgot_password_code", length = 64)
+    private String forgotPasswordCode;
+
     @PrePersist
     protected void onCreate() {
         createdAt = new Date();

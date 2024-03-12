@@ -49,5 +49,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByRole(UserRole role);
 
     @Query(value = "SELECT * FROM users u WHERE BINARY u.verification_code = :token", nativeQuery = true)
-    Optional<User> getUserByVerificationCode(@Param("token") String token);
+    Optional<User> findByVerificationCode(@Param("token") String token);
+
+    @Query(value = "SELECT * FROM users u WHERE BINARY u.forgot_password_code = :token", nativeQuery = true)
+    Optional<User> findByForgotPasswordCode(@Param("token") String token);
 }

@@ -4,20 +4,30 @@ import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import tech.qizz.core.auth.dto.AuthResponse;
+import tech.qizz.core.auth.dto.CheckResetTokenRequest;
 import tech.qizz.core.auth.dto.CreateGuestRequest;
+import tech.qizz.core.auth.dto.ForgotPasswordRequest;
 import tech.qizz.core.auth.dto.LoginRequest;
 import tech.qizz.core.auth.dto.RegisterRequest;
+import tech.qizz.core.auth.dto.ResetPasswordRequest;
 import tech.qizz.core.auth.dto.VerifyRequest;
 
 public interface AuthService {
 
 
-    public AuthResponse login(LoginRequest body, HttpServletResponse response);
+    AuthResponse login(LoginRequest body, HttpServletResponse response);
 
-    public void register(RegisterRequest body)
+    void register(RegisterRequest body)
         throws MessagingException, UnsupportedEncodingException;
 
-    public AuthResponse createGuest(CreateGuestRequest body, HttpServletResponse response);
+    void forgotPassword(ForgotPasswordRequest body)
+        throws MessagingException, UnsupportedEncodingException;
 
-    public AuthResponse verify(VerifyRequest body, HttpServletResponse response);
+    void checkResetToken(CheckResetTokenRequest body);
+
+    AuthResponse resetPassword(ResetPasswordRequest body, HttpServletResponse response);
+
+    AuthResponse createGuest(CreateGuestRequest body, HttpServletResponse response);
+
+    AuthResponse verify(VerifyRequest body, HttpServletResponse response);
 }

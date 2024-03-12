@@ -14,9 +14,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tech.qizz.core.auth.dto.AuthResponse;
+import tech.qizz.core.auth.dto.CheckResetTokenRequest;
 import tech.qizz.core.auth.dto.CreateGuestRequest;
+import tech.qizz.core.auth.dto.ForgotPasswordRequest;
 import tech.qizz.core.auth.dto.LoginRequest;
 import tech.qizz.core.auth.dto.RegisterRequest;
+import tech.qizz.core.auth.dto.ResetPasswordRequest;
 import tech.qizz.core.auth.dto.VerifyRequest;
 import tech.qizz.core.auth.jwt.JwtService;
 import tech.qizz.core.entity.User;
@@ -84,6 +87,70 @@ public class AuthServiceImpl implements AuthService {
         sendVerificationEmail(savedUser, CLIENT_URL);
     }
 
+    @Override
+    public void forgotPassword(ForgotPasswordRequest body)
+        throws MessagingException, UnsupportedEncodingException {
+        User user = userRepository
+            .findByEmail(body.getEmail())
+            .orElseThrow(() -> new NotFoundException("User not found"));
+        String forgotPasswordCode = RandomString.make(64);
+        user.setForgotPasswordCode(forgotPasswordCode);
+        userRepository.save(user);
+        sendResetPasswordEmail(user, CLIENT_URL);
+    }
+
+    @Override
+    public void checkResetToken(CheckResetTokenRequest body) {
+        userRepository
+            .findByForgotPasswordCode(body.getToken())
+            .orElseThrow(() -> new NotFoundException("Invalid token"));
+    }
+
+    @Override
+    public AuthResponse resetPassword(ResetPasswordRequest body, HttpServletResponse response) {
+        User user = userRepository
+            .findByForgotPasswordCode(body.getToken())
+            .orElseThrow(() -> new NotFoundException("Invalid token"));
+
+        user.setPassword(passwordEncoder.encode(body.getPassword()));
+        user.setForgotPasswordCode(null);
+        userRepository.save(user);
+        String token = jwtService.generateToken(user);
+        jwtService.setJwtToCookie(response, token);
+        jwtService.setUserDataToCookie(response, ProfileResponse.of(user));
+        return AuthResponse.builder()
+            .user(ProfileResponse.of(user))
+            .token(token)
+            .build();
+    }
+
+    private void sendResetPasswordEmail(User user, String siteUrl)
+        throws MessagingException, UnsupportedEncodingException {
+        String toAddress = user.getEmail();
+        String senderName = "Quiz App";
+        String subject = "[Qizz App] Reset password request";
+        String content = "Dear [[name]],<br>"
+            + "Please click the link below to reset your password:<br>"
+            + "<h3><a href=\"[[URL]]\" target=\"_self\">RESET</a></h3>"
+            + "If you did not request a password reset, please ignore this email.<br>"
+            + "Thank you,<br>"
+            + "Qizz App.";
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(FROM_EMAIL, senderName);
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+
+        content = content.replace("[[name]]", user.getObjectUsername());
+        String resetPasswordURL =
+            siteUrl + "/auth/reset-password?token=" + user.getForgotPasswordCode();
+        content = content.replace("[[URL]]", resetPasswordURL);
+        helper.setText(content, true);
+        mailSender.send(message);
+    }
+
     private void sendVerificationEmail(User user, String siteUrl)
         throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
@@ -133,7 +200,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponse verify(VerifyRequest body, HttpServletResponse response) {
-        User user = userRepository.getUserByVerificationCode(body.getToken()).orElseThrow(
+        User user = userRepository.findByVerificationCode(body.getToken()).orElseThrow(
             () -> new NotFoundException("Invalid Token")
         );
 
