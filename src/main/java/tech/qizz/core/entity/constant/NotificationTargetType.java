@@ -4,8 +4,8 @@ import java.util.Arrays;
 
 public enum NotificationTargetType {
     ALL_PEOPLE,
-    STAFF_ONLY,
-    USER_ONLY;
+    ONLY_STAFF,
+    ONLY_USER;
 public static NotificationTargetType validateNotificationTargetType(String type) {
     return Arrays.stream(NotificationTargetType.values())
         .filter(notificationTargetType -> notificationTargetType.name().equalsIgnoreCase(type)).findFirst()
