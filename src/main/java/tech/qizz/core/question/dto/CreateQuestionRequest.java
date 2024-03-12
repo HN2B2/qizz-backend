@@ -16,15 +16,10 @@ public class CreateQuestionRequest {
     @NotBlank
     @JsonProperty("content")
     private String content;
-//    @Positive
-//    @NotBlank
-//    @Min(1)
+
     @JsonProperty("point")
     private Long point;
-//    @Positive
-//    @Pattern(regexp = "^(15|30|60|120)$")
     @JsonProperty("duration")
-//    @NotBlank
     private int duration;
     @NotBlank
     @JsonProperty("type")

@@ -116,4 +116,10 @@ public class BankController {
         return new ResponseEntity<>(favorite, HttpStatus.OK);
     }
 
+    @PostMapping("/duplicate/{id}")
+    public ResponseEntity<BankResponse> duplicateBank(@PathVariable Long id, @RequestUser User user) {
+        BankResponse duplicatedBank = bankService.duplicateBank(id, user);
+        return new ResponseEntity<>(duplicatedBank,HttpStatus.CREATED);
+    }
+
 }

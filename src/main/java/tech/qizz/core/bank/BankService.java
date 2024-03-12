@@ -38,4 +38,6 @@ public interface BankService {
     public FavoriteResponse isFavorite(Long id, User user);
 
     public FavoriteResponse updateFavorite(Long id, User user);
+
+    public BankResponse duplicateBank(Long id, User user);
 }
