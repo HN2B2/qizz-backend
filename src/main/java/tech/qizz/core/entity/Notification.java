@@ -1,30 +1,19 @@
 package tech.qizz.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
+
 import java.util.Date;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import lombok.*;
+import tech.qizz.core.entity.constant.NotificationTargetType;
 
 @Entity
 @Table(name = "notifications")
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Notification {
@@ -34,9 +23,17 @@ public class Notification {
     @Column(name = "notification_id")
     private long notificationId;
 
+
+    @Column(name = "title", nullable = false)
+    private String title;
+
     @Lob
     @Column(name = "content", nullable = false)
     private String content;
+
+    @Column(name = "target_type", nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private NotificationTargetType targetType;
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -60,4 +57,10 @@ public class Notification {
     @JsonIgnore
     @OneToMany(mappedBy = "notification", cascade = CascadeType.ALL)
     private List<UserNotification> userNotifications;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "created_by", referencedColumnName = "user_id")
+    private User createdBy;
+
 }

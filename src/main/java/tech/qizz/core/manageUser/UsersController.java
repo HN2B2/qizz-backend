@@ -78,6 +78,7 @@ public class UsersController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<UsersResponse> createUser(@Valid @RequestBody CreateUserRequest body,
