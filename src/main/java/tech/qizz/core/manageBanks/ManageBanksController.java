@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import tech.qizz.core.manageBanks.dto.BankResponse;
 import tech.qizz.core.manageBanks.dto.GetAllBanksResponse;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/manageBanks")
 @CrossOrigin
@@ -23,14 +25,20 @@ public class ManageBanksController {
             @RequestParam(required = false, defaultValue = "10") Integer limit,
             @RequestParam(required = false, defaultValue = "") String keyword,
             @RequestParam(required = false, defaultValue = "id") String order,
-            @RequestParam(required = false, defaultValue = "desc") String sort
+            @RequestParam(required = false, defaultValue = "desc") String sort,
+            @RequestParam(required = false) List<Long> subCategoryIds,
+            @RequestParam(required = false) Integer mi,
+            @RequestParam(required = false) Integer ma
     ) {
         GetAllBanksResponse banks = manageBanksService.getAllBanks(
                 page,
                 limit,
                 keyword,
                 order,
-                sort
+                sort,
+                subCategoryIds,
+                mi,
+                ma
         );
         return new ResponseEntity<>(banks, HttpStatus.OK);
     }

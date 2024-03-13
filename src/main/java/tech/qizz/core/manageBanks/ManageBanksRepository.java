@@ -8,15 +8,27 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import tech.qizz.core.entity.QuizBank;
 
+import java.util.List;
+
 @Repository
 public interface ManageBanksRepository extends JpaRepository<QuizBank, Long> {
 
     @Query("SELECT b FROM QuizBank b WHERE " +
-            "(b.name LIKE CONCAT('%', :keyword, '%') OR " +
-            "b.description LIKE CONCAT('%', :keyword, '%'))"
+            "((b.name LIKE CONCAT('%', :keyword, '%') OR " +
+            "b.description LIKE CONCAT('%', :keyword, '%')) " +
+            " AND (:mi IS NULL OR SIZE(b.questions) >= :mi)" +
+            " AND (:ma IS NULL OR SIZE(b.questions) <= :ma)" +
+            " AND (:subCategoryId IS NULL OR " +
+            "(SELECT COUNT(DISTINCT sc.subCategoryId) FROM b.subCategories sc WHERE sc.subCategoryId IN :subCategoryId) = :subCategoryCount" +
+            ")" +
+
+            ")"
     )
     Page<QuizBank> findBanksByKeyword(
             @Param("keyword") String keyword,
+            @Param("subCategoryId") List<Long> subCategoryId,
+            @Param("subCategoryCount") int subCategoryCount,
+            @Param("mi") Integer mi, @Param("ma") Integer ma,
             Pageable pageable
     );
 
