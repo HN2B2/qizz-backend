@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.exception.ForbiddenException;
 import tech.qizz.core.exception.NotFoundException;
-import tech.qizz.core.manageUser.UserRepository;
+import tech.qizz.core.repository.UserRepository;
 
 @Aspect
 @Component

@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.entity.constant.UserRole;
-import tech.qizz.core.manageUser.UserRepository;
+import tech.qizz.core.repository.UserRepository;
 
 @Component
 @RequiredArgsConstructor

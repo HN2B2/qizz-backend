@@ -10,11 +10,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import tech.qizz.core.entity.Question;
 import tech.qizz.core.entity.QuizBank;
 import tech.qizz.core.entity.constant.QuestionType;
-import tech.qizz.core.question.dto.QuestionResponse;
+import tech.qizz.core.module.question.QuestionServiceImpl;
+import tech.qizz.core.module.question.dto.QuestionResponse;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Optional;
+import tech.qizz.core.repository.QuestionRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;

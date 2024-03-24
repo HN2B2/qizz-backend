@@ -7,14 +7,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import tech.qizz.core.bank.BankRepository;
+import tech.qizz.core.repository.ManageBankRepository;
+import tech.qizz.core.module.manageBank.ManageBankServiceImpl;
+import tech.qizz.core.repository.BankRepository;
 import tech.qizz.core.entity.ManageBank;
 import tech.qizz.core.entity.QuizBank;
-import tech.qizz.core.manageBank.dto.ManageBankResponse;
+import tech.qizz.core.module.manageBank.dto.ManageBankResponse;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
