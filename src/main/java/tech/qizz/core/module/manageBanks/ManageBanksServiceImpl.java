@@ -4,6 +4,7 @@ package tech.qizz.core.module.manageBanks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import tech.qizz.core.entity.QuizBank;
@@ -24,9 +25,17 @@ public class ManageBanksServiceImpl implements ManageBanksService {
     }
 
     @Override
-    public GetAllBanksResponse getAllBanks(Integer page, Integer limit, String keyword, String order, String sort, List<Long> subCategoryIds, Integer mi, Integer ma) {
+    public GetAllBanksResponse getAllBanks(
+            Integer page,
+            Integer limit,
+            String keyword,
+            String order,
+            String sort,
+            List<Long> subCategoryIds,
+            Integer mi,
+            Integer ma) {
         Sort sortType = sort.equalsIgnoreCase("asc") ? Sort.by(order) : Sort.by(order).descending();
-        PageRequest pageable = PageRequest.of(page - 1, limit, sortType);
+        Pageable pageable = PageRequest.of(page - 1, limit, sortType);
         Page<QuizBank> banks = manageBanksRepository.findBanksByKeyword(keyword, (subCategoryIds==null||subCategoryIds.isEmpty())?null:subCategoryIds, (subCategoryIds==null||subCategoryIds.isEmpty())?0:subCategoryIds.size(), mi, ma, pageable);
         return GetAllBanksResponse.of(banks);
     }

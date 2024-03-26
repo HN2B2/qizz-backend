@@ -13,7 +13,6 @@ import tech.qizz.core.entity.QuizBank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class GetAllBanksResponse {
 
     @JsonProperty("data")

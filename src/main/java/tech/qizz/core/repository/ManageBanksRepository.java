@@ -13,7 +13,9 @@ import java.util.List;
 @Repository
 public interface ManageBanksRepository extends JpaRepository<QuizBank, Long> {
 
-    @Query("SELECT b FROM QuizBank b WHERE " +
+    @Query("SELECT DISTINCT b FROM QuizBank b "+
+            "LEFT JOIN b.subCategories subcat " +
+            " WHERE " +
             "((b.name LIKE CONCAT('%', :keyword, '%') OR " +
             "b.description LIKE CONCAT('%', :keyword, '%')) " +
             " AND (:mi IS NULL OR SIZE(b.questions) >= :mi)" +
