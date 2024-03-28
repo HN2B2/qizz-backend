@@ -15,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import tech.qizz.core.auth.jwt.JwtAuthFilter;
+import tech.qizz.core.module.auth.jwt.JwtAuthFilter;
 
 @Configuration
 @EnableWebSecurity

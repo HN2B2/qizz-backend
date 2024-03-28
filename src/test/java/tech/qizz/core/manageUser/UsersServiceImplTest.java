@@ -15,9 +15,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.entity.constant.UserRole;
-import tech.qizz.core.manageUser.dto.GetAllUserResponse;
-import tech.qizz.core.manageUser.dto.UpdateUserRequest;
-import tech.qizz.core.manageUser.dto.UsersResponse;
+import tech.qizz.core.repository.UserRepository;
+import tech.qizz.core.module.manageUser.UsersServiceImpl;
+import tech.qizz.core.module.manageUser.dto.GetAllUserResponse;
+import tech.qizz.core.module.manageUser.dto.UpdateUserRequest;
+import tech.qizz.core.module.manageUser.dto.UsersResponse;
 
 @ExtendWith(MockitoExtension.class)
 class UsersServiceImplTest {

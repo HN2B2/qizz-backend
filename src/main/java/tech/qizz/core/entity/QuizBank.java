@@ -81,6 +81,10 @@ public class QuizBank {
     @Column(name = "draft", columnDefinition = "bit")
     private Boolean draft;
 
+
+    @Column(name = "disabled", columnDefinition = "bit")
+    private Boolean disabled;
+
     @JsonIgnore
     @OneToMany(mappedBy = "quizBank", cascade = CascadeType.ALL)
     private List<Quiz> quizzes;
@@ -107,9 +111,18 @@ public class QuizBank {
     )
     private Set<SubCategory> subCategories;
 
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "quizBank", cascade = CascadeType.ALL)
+//    private List<FavoriteBank> favoriteBanks;
+
     @JsonIgnore
-    @OneToMany(mappedBy = "quizBank", cascade = CascadeType.ALL)
-    private List<FavoriteBank> favoriteBanks;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "favorite_banks",
+            joinColumns = @JoinColumn(name = "bank_id", referencedColumnName = "quiz_bank_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    )
+    private Set<User> favoriteUsers;
 
     @JsonIgnore
     @OneToMany(mappedBy = "quizBank", cascade = CascadeType.ALL)

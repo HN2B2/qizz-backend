@@ -41,7 +41,7 @@ import tech.qizz.core.entity.constant.UserRole;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class    User implements UserDetails {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,12 +79,18 @@ public class    User implements UserDetails {
     @Column(name = "enabled")
     private Boolean enabled;
 
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
+
+    @Column(name = "forgot_password_code", length = 64)
+    private String forgotPasswordCode;
+
     @PrePersist
     protected void onCreate() {
         createdAt = new Date();
         modifiedAt = createdAt;
         banned = false;
-        enabled = true;
+        enabled = false;
     }
 
     @PreUpdate
@@ -123,9 +129,13 @@ public class    User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<QuizJoinedUser> quizJoinedUsers;
 
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<FavoriteBank> favoriteBanks;
+
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<FavoriteBank> favoriteBanks;
+    @ManyToMany(mappedBy = "favoriteUsers", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<QuizBank> intermediateFavoriteQuizBanks;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -134,6 +144,10 @@ public class    User implements UserDetails {
     @JsonIgnore
     @ManyToMany(mappedBy = "upVoteUsers", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<QuizBank> intermediateUpvotedQuizBanks;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
+    private List<Notification> manageNotifications;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
