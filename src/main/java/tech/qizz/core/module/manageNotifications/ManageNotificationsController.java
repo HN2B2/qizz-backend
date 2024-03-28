@@ -6,7 +6,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import tech.qizz.core.annotation.RequestUser;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.entity.constant.NotificationTargetType;
@@ -18,31 +25,32 @@ import tech.qizz.core.module.manageNotifications.dto.UpdateNotificationRequest;
 
 @RestController
 @RequestMapping("/notifications")
-@CrossOrigin
 @RequiredArgsConstructor
 public class ManageNotificationsController {
+
     private final ManageNotificationsService manageNotificationsService;
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('STAFF', 'ADMIN')")
     public ResponseEntity<GetAllNotificationsResponse> getAllNotifications(
-            @RequestParam(required = false, defaultValue = "1") Integer page,
-            @RequestParam(required = false, defaultValue = "10") Integer limit,
-            @RequestParam(required = false, defaultValue = "") String keyword,
-            @RequestParam(required = false) String target,
-            @RequestParam(required = false, defaultValue = "id") String order,
-            @RequestParam(required = false, defaultValue = "desc") String sort
+        @RequestParam(required = false, defaultValue = "1") Integer page,
+        @RequestParam(required = false, defaultValue = "10") Integer limit,
+        @RequestParam(required = false, defaultValue = "") String keyword,
+        @RequestParam(required = false) String target,
+        @RequestParam(required = false, defaultValue = "id") String order,
+        @RequestParam(required = false, defaultValue = "desc") String sort
 
-    ){
-        NotificationTargetType targetType = target == null ? null : NotificationTargetType.validateNotificationTargetType(target);
+    ) {
+        NotificationTargetType targetType =
+            target == null ? null : NotificationTargetType.validateNotificationTargetType(target);
 
         GetAllNotificationsResponse notification = manageNotificationsService.getAllNotifications(
-                page,
-                limit,
-                keyword,
-                targetType,
-                order,
-                sort
+            page,
+            limit,
+            keyword,
+            targetType,
+            order,
+            sort
         );
 
         return new ResponseEntity<>(notification, HttpStatus.OK);
@@ -51,8 +59,8 @@ public class ManageNotificationsController {
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('USER','STAFF', 'ADMIN')")
     public ResponseEntity<NotificationResponse> getNotificationById(
-            @PathVariable Long id
-    ){
+        @PathVariable Long id
+    ) {
         NotificationResponse notification = manageNotificationsService.getNotificationById(id);
         return new ResponseEntity<>(notification, HttpStatus.OK);
     }
@@ -60,17 +68,20 @@ public class ManageNotificationsController {
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<NotificationResponse> createNotification(
-            @Valid @RequestBody CreateNotificationRequest body, @RequestUser User user, BindingResult result
-    ){
-        NotificationResponse notification = manageNotificationsService.createNotification(user.getUserId(),body);
+        @Valid @RequestBody CreateNotificationRequest body, @RequestUser User user,
+        BindingResult result
+    ) {
+        NotificationResponse notification = manageNotificationsService.createNotification(
+            user.getUserId(), body);
         return new ResponseEntity<>(notification, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<NotificationResponse> updateNotification(
-            @PathVariable Long id, @Valid @RequestBody UpdateNotificationRequest body, BindingResult result
-    ){
+        @PathVariable Long id, @Valid @RequestBody UpdateNotificationRequest body,
+        BindingResult result
+    ) {
         if (result.hasErrors() || body == null) {
             throw new BadRequestException("Invalid request");
         }

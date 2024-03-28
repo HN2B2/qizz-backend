@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +21,6 @@ import tech.qizz.core.module.takeQuiz.dto.waitingRoom.WaitingRoomResponse;
 import tech.qizz.core.repository.QuizRepository;
 
 @RestController
-@CrossOrigin
 @RequiredArgsConstructor
 @RequestMapping("/take-quiz")
 public class TakeQuizController {

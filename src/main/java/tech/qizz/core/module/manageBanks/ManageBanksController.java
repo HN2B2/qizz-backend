@@ -1,20 +1,23 @@
 package tech.qizz.core.module.manageBanks;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import tech.qizz.core.annotation.RequestUser;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.module.manageBanks.dto.BankResponse;
 import tech.qizz.core.module.manageBanks.dto.GetAllBanksResponse;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/manageBanks")
-@CrossOrigin
 @RequiredArgsConstructor
 public class ManageBanksController {
 
@@ -23,24 +26,24 @@ public class ManageBanksController {
     @GetMapping
     @PreAuthorize("hasAnyAuthority('USER', 'STAFF', 'ADMIN')")
     public ResponseEntity<GetAllBanksResponse> getAllBanks(
-            @RequestParam(required = false, defaultValue = "1") Integer page,
-            @RequestParam(required = false, defaultValue = "10") Integer limit,
-            @RequestParam(required = false, defaultValue = "") String keyword,
-            @RequestParam(required = false, defaultValue = "id") String order,
-            @RequestParam(required = false, defaultValue = "desc") String sort,
-            @RequestParam(required = false) List<Long> subCategoryIds,
-            @RequestParam(required = false) Integer mi,
-            @RequestParam(required = false) Integer ma
+        @RequestParam(required = false, defaultValue = "1") Integer page,
+        @RequestParam(required = false, defaultValue = "10") Integer limit,
+        @RequestParam(required = false, defaultValue = "") String keyword,
+        @RequestParam(required = false, defaultValue = "id") String order,
+        @RequestParam(required = false, defaultValue = "desc") String sort,
+        @RequestParam(required = false) List<Long> subCategoryIds,
+        @RequestParam(required = false) Integer mi,
+        @RequestParam(required = false) Integer ma
     ) {
         GetAllBanksResponse banks = manageBanksService.getAllBanks(
-                page,
-                limit,
-                keyword,
-                order,
-                sort,
-                subCategoryIds,
-                mi,
-                ma
+            page,
+            limit,
+            keyword,
+            order,
+            sort,
+            subCategoryIds,
+            mi,
+            ma
         );
         return new ResponseEntity<>(banks, HttpStatus.OK);
     }
@@ -54,7 +57,7 @@ public class ManageBanksController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteBankRequest(@PathVariable Long id,
-                                                        @RequestUser User user) {
+        @RequestUser User user) {
         manageBanksService.deleteBank(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
