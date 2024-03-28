@@ -101,7 +101,6 @@ public interface BankRepository extends JpaRepository<QuizBank, Long> {
         "(" +
         "b.name LIKE CONCAT('%', :keyword, '%') AND " +
         "(:draft IS NULL OR b.draft = :draft) AND " +
-        "(b.disabled = false ) AND " +
         "(:subCategoryId IS NULL OR " +
         "(SELECT COUNT(DISTINCT sc.subCategoryId) FROM b.subCategories sc WHERE sc.subCategoryId IN :subCategoryId) = :subCategoryCount" +
         ") AND " +

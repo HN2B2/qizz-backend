@@ -5,8 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import tech.qizz.core.annotation.RequestUser;
-import tech.qizz.core.entity.User;
 import tech.qizz.core.module.manageBanks.dto.BankResponse;
 import tech.qizz.core.module.manageBanks.dto.GetAllBanksResponse;
 
@@ -50,12 +48,5 @@ public class ManageBanksController {
     public ResponseEntity<BankResponse> getBankById(@PathVariable Long id) {
         BankResponse bank = manageBanksService.getBankById(id);
         return new ResponseEntity<>(bank, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteBankRequest(@PathVariable Long id,
-                                                        @RequestUser User user) {
-        manageBanksService.deleteBank(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
