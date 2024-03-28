@@ -81,6 +81,10 @@ public class QuizBank {
     @Column(name = "draft", columnDefinition = "bit")
     private Boolean draft;
 
+
+    @Column(name = "disabled", columnDefinition = "bit")
+    private Boolean disabled;
+
     @JsonIgnore
     @OneToMany(mappedBy = "quizBank", cascade = CascadeType.ALL)
     private List<Quiz> quizzes;

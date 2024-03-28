@@ -30,6 +30,7 @@ public class BankResponse {
     private Boolean publicEditable;
     private List<SubCategoryResponse> subCategories;
     private Boolean draft;
+    private Boolean disabled;
     private Integer totalQuestions;
     private ProfileResponse createdBy;
     private ProfileResponse modifiedBy;
@@ -48,6 +49,7 @@ public class BankResponse {
             .publicEditable(bank.getPublicEditable())
             .subCategories(bank.getSubCategories() == null ? null : bank.getSubCategories().stream().map(SubCategoryResponse::of).collect(Collectors.toList()))
             .draft(bank.getDraft())
+            .disabled(bank.getDisabled())
             .totalQuestions((bank.getQuestions() == null) ? 0 : (int) bank.getQuestions().stream().filter(question -> !question.getDisabled()).count())
             .createdBy(ProfileResponse.of(bank.getCreatedBy()))
             .modifiedBy(ProfileResponse.of(bank.getModifiedBy()))
