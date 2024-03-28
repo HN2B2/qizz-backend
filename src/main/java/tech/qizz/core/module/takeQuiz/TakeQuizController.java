@@ -3,6 +3,7 @@ package tech.qizz.core.module.takeQuiz;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import tech.qizz.core.exception.NotFoundException;
 import tech.qizz.core.module.takeQuiz.dto.QuizRoomInfoResponse;
 import tech.qizz.core.module.takeQuiz.dto.playing.AnswerRequest;
 import tech.qizz.core.module.takeQuiz.dto.playing.RankingResponse;
+import tech.qizz.core.module.takeQuiz.dto.waitingRoom.WaitingRoomResponse;
 import tech.qizz.core.repository.QuizRepository;
 
 @RestController
@@ -56,5 +58,14 @@ public class TakeQuizController {
     ) {
         takeQuizWebSocketService.answer(quizCode, questionId, user, answer);
         return new ResponseEntity<>(null, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/monitor/{quizCode}")
+    @PreAuthorize("hasAnyAuthority('USER', 'STAFF', 'ADMIN')")
+    public QuizRoomInfoResponse<WaitingRoomResponse> monitor(
+        @PathVariable String quizCode,
+        @RequestUser User user
+    ) {
+        return takeQuizWebSocketService.checkMonitor(quizCode, user);
     }
 }
