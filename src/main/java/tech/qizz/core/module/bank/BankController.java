@@ -18,14 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tech.qizz.core.annotation.RequestUser;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.exception.BadRequestException;
-import tech.qizz.core.module.bank.dto.BankResponse;
-import tech.qizz.core.module.bank.dto.BanksByCategoryResponse;
-import tech.qizz.core.module.bank.dto.CreateBankRequest;
-import tech.qizz.core.module.bank.dto.CreateSubCategoryToBankRequest;
-import tech.qizz.core.module.bank.dto.FavoriteResponse;
-import tech.qizz.core.module.bank.dto.GetAllBanksResponse;
-import tech.qizz.core.module.bank.dto.UpdateBankRequest;
-import tech.qizz.core.module.bank.dto.UpvoteResponse;
+import tech.qizz.core.module.bank.dto.*;
 
 @RestController
 @AllArgsConstructor

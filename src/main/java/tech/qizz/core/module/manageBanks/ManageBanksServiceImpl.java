@@ -8,6 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import tech.qizz.core.entity.QuizBank;
+import tech.qizz.core.entity.constant.UserRole;
+import tech.qizz.core.exception.ForbiddenException;
+import tech.qizz.core.exception.NotFoundException;
 import tech.qizz.core.module.manageBanks.dto.BankResponse;
 import tech.qizz.core.module.manageBanks.dto.GetAllBanksResponse;
 
@@ -49,6 +52,12 @@ public class ManageBanksServiceImpl implements ManageBanksService {
 
     @Override
     public void deleteBank(Long id) {
-        manageBanksRepository.deleteById(id);
+
+        QuizBank bank = manageBanksRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Bank not found"));
+
+
+        bank.setDisabled(true);
+        manageBanksRepository.save(bank);
     }
 }

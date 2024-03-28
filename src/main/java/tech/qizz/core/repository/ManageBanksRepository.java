@@ -20,6 +20,7 @@ public interface ManageBanksRepository extends JpaRepository<QuizBank, Long> {
             "b.description LIKE CONCAT('%', :keyword, '%')) " +
             " AND (:mi IS NULL OR SIZE(b.questions) >= :mi)" +
             " AND (:ma IS NULL OR SIZE(b.questions) <= :ma)" +
+            " AND b.disabled=false" +
             " AND (:subCategoryId IS NULL OR " +
             "(SELECT COUNT(DISTINCT sc.subCategoryId) FROM b.subCategories sc WHERE sc.subCategoryId IN :subCategoryId) = :subCategoryCount" +
             ")" +
