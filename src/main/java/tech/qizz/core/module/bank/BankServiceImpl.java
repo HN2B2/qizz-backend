@@ -12,16 +12,22 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 //import tech.qizz.core.bank.dto.*;
 import tech.qizz.core.entity.*;
-import tech.qizz.core.entity.constant.UserRole;
 import tech.qizz.core.exception.ForbiddenException;
 import tech.qizz.core.exception.NotFoundException;
-import tech.qizz.core.module.bank.dto.*;
 import tech.qizz.core.repository.ManageBankRepository;
 import tech.qizz.core.module.manageBank.dto.CreateManageBankRequest;
 import tech.qizz.core.repository.CategoryRepository;
 import tech.qizz.core.module.manageCategory.dto.CategoryResponse;
 import tech.qizz.core.repository.SubCategoryRepository;
 import tech.qizz.core.repository.UserRepository;
+import tech.qizz.core.module.bank.dto.BankResponse;
+import tech.qizz.core.module.bank.dto.BanksByCategoryResponse;
+import tech.qizz.core.module.bank.dto.CreateBankRequest;
+import tech.qizz.core.module.bank.dto.CreateSubCategoryToBankRequest;
+import tech.qizz.core.module.bank.dto.FavoriteResponse;
+import tech.qizz.core.module.bank.dto.GetAllBanksResponse;
+import tech.qizz.core.module.bank.dto.UpdateBankRequest;
+import tech.qizz.core.module.bank.dto.UpvoteResponse;
 import tech.qizz.core.repository.QuestionRepository;
 import tech.qizz.core.repository.BankRepository;
 
@@ -69,7 +75,6 @@ public class BankServiceImpl implements BankService {
             .quizPublicity(bank.getQuizPublicity())
             .publicEditable(bank.getPublicEditable())
             .draft(bank.getDraft())
-                .disabled(false)
             .createdBy(user)
             .modifiedBy(user)
 //                .subCategories(null)
@@ -155,12 +160,11 @@ public class BankServiceImpl implements BankService {
         QuizBank bank = bankRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Bank not found"));
 
-        if (user.getRole() != UserRole.ADMIN && user.getRole() != UserRole.STAFF && bank.getCreatedBy().getUserId()!=user.getUserId()) {
+        if (bank.getCreatedBy().getUserId()!=user.getUserId()) {
             throw new ForbiddenException("You don't have permission to delete this bank");
         }
 
-        bank.setDisabled(true);
-        bankRepository.save(bank);
+        bankRepository.delete(bank);
     }
 
     @Override

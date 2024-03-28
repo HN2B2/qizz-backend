@@ -4,8 +4,14 @@ package tech.qizz.core.module.bank;
 import tech.qizz.core.entity.User;
 
 import java.util.List;
-
-import tech.qizz.core.module.bank.dto.*;
+import tech.qizz.core.module.bank.dto.BankResponse;
+import tech.qizz.core.module.bank.dto.BanksByCategoryResponse;
+import tech.qizz.core.module.bank.dto.CreateBankRequest;
+import tech.qizz.core.module.bank.dto.CreateSubCategoryToBankRequest;
+import tech.qizz.core.module.bank.dto.FavoriteResponse;
+import tech.qizz.core.module.bank.dto.GetAllBanksResponse;
+import tech.qizz.core.module.bank.dto.UpdateBankRequest;
+import tech.qizz.core.module.bank.dto.UpvoteResponse;
 
 public interface BankService {
     public BankResponse getBankResponseById(Long id, User user);
