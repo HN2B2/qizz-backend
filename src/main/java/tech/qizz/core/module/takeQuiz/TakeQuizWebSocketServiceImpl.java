@@ -251,7 +251,7 @@ public class TakeQuizWebSocketServiceImpl implements TakeQuizWebSocketService {
         if (ownQuizUser.getUserId() != quiz.getCreatedBy().getUserId()) {
             throw new ForbiddenException("You are not the owner of this quiz");
         }
-        if (quiz.getQuizState().equals(QuizState.WAITING)) {
+        if (!quiz.getQuizState().equals(QuizState.WAITING)) {
             throw new BadRequestException("Quiz is not waiting");
         }
         User user = userRepository.findByEmail(body.getData().getEmail())
