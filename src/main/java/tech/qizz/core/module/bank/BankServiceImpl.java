@@ -49,6 +49,12 @@ public class BankServiceImpl implements BankService {
         if (bankResponse.getManageBanks().stream().map(manageBankResponse -> manageBankResponse.getUser().getId()).toList().contains(user.getUserId())) {
             kt=true;
         }
+        if (user.getRole().equals(UserRole.ADMIN) || user.getRole().equals(UserRole.STAFF)) {
+            kt=true;
+        }
+        if (bankResponse.getCreatedBy().getId().equals(user.getUserId())) {
+            kt=true;
+        }
         if (!kt) {
             throw new ForbiddenException("You don't have permission to access this bank");
         }
@@ -120,6 +126,12 @@ public class BankServiceImpl implements BankService {
                 break;
             }
         }
+        if (user.getRole().equals(UserRole.ADMIN) || user.getRole().equals(UserRole.STAFF)) {
+            kt=true;
+        }
+        if (oldBank.getCreatedBy().getUserId()==user.getUserId()) {
+            kt=true;
+        }
         if (!kt) {
             throw new ForbiddenException("You don't have permission to edit this bank");
         }
@@ -178,6 +190,12 @@ public class BankServiceImpl implements BankService {
                 break;
             }
         }
+        if (user.getRole().equals(UserRole.ADMIN) || user.getRole().equals(UserRole.STAFF)) {
+            kt=true;
+        }
+        if (bank.getCreatedBy().getUserId()==user.getUserId()) {
+            kt=true;
+        }
         if (!kt) {
             throw new ForbiddenException("You don't have permission to edit this bank");
         }
@@ -200,6 +218,12 @@ public class BankServiceImpl implements BankService {
                 kt=true;
                 break;
             }
+        }
+        if (user.getRole().equals(UserRole.ADMIN) || user.getRole().equals(UserRole.STAFF)) {
+            kt=true;
+        }
+        if (bank.getCreatedBy().getUserId()==user.getUserId()) {
+            kt=true;
         }
         if (!kt) {
             throw new ForbiddenException("You don't have permission to edit this bank");
@@ -301,6 +325,12 @@ public class BankServiceImpl implements BankService {
             kt=true;
         }
         if (bank.getManageBanks().stream().map(manageBankResponse -> manageBankResponse.getUser().getUserId()).toList().contains(user.getUserId())) {
+            kt=true;
+        }
+        if (user.getRole().equals(UserRole.ADMIN) || user.getRole().equals(UserRole.STAFF)) {
+            kt=true;
+        }
+        if (bank.getCreatedBy().getUserId()==user.getUserId()) {
             kt=true;
         }
         if (!kt) {
