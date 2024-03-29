@@ -19,5 +19,5 @@ public interface QuizJoinedUserRepository extends JpaRepository<QuizJoinedUser, 
 
     Integer countByQuiz(Quiz quiz);
 
-    void deleteByQuizAndUser(Quiz quiz, User user);
+    void removeByQuizAndUser(Quiz quiz, User user);
 }

@@ -12,6 +12,7 @@ import tech.qizz.core.module.takeQuiz.dto.waitingRoom.KickPlayerRequest;
 public class TakeQuizWebSocketController {
 
     private final TakeQuizWebSocketService takeQuizWebSocketService;
+    private final ITakeQuizWebSocketService iTakeQuizWebSocketService;
 
     @MessageMapping("/join/{quizCode}")
     public void joinQuizRoom(
@@ -40,10 +41,6 @@ public class TakeQuizWebSocketController {
         @DestinationVariable String quizCode,
         WebSocketRequest<KickPlayerRequest> body
     ) {
-        try {
-            takeQuizWebSocketService.kickPlayer(quizCode, body);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        iTakeQuizWebSocketService.kickPlayer(quizCode, body);
     }
 }

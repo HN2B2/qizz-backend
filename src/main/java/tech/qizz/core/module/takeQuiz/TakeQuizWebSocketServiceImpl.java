@@ -1,12 +1,9 @@
 package tech.qizz.core.module.takeQuiz;
 
-import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import tech.qizz.core.entity.Question;
@@ -21,7 +18,6 @@ import tech.qizz.core.exception.ForbiddenException;
 import tech.qizz.core.exception.NotFoundException;
 import tech.qizz.core.module.auth.jwt.JwtService;
 import tech.qizz.core.module.takeQuiz.dto.QuizRoomInfoResponse;
-import tech.qizz.core.module.takeQuiz.dto.WebSocketRequest;
 import tech.qizz.core.module.takeQuiz.dto.playing.AnswerRequest;
 import tech.qizz.core.module.takeQuiz.dto.playing.PlayingQuestionResponse;
 import tech.qizz.core.module.takeQuiz.dto.playing.PlayingResponse;
@@ -29,7 +25,6 @@ import tech.qizz.core.module.takeQuiz.dto.playing.PlayingState;
 import tech.qizz.core.module.takeQuiz.dto.playing.RankingResponse;
 import tech.qizz.core.module.takeQuiz.dto.playing.UserRankingResponse;
 import tech.qizz.core.module.takeQuiz.dto.waitingRoom.JoinState;
-import tech.qizz.core.module.takeQuiz.dto.waitingRoom.KickPlayerRequest;
 import tech.qizz.core.module.takeQuiz.dto.waitingRoom.RoomUserResponse;
 import tech.qizz.core.module.takeQuiz.dto.waitingRoom.WaitingRoomResponse;
 import tech.qizz.core.repository.QuestionHistoryRepository;
@@ -37,12 +32,9 @@ import tech.qizz.core.repository.QuestionRepository;
 import tech.qizz.core.repository.QuizJoinedUserRepository;
 import tech.qizz.core.repository.QuizQuestionRepository;
 import tech.qizz.core.repository.QuizRepository;
-import tech.qizz.core.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
-@Scope(proxyMode = ScopedProxyMode.INTERFACES)
-@Transactional
 public class TakeQuizWebSocketServiceImpl implements TakeQuizWebSocketService {
 
     private final JwtService jwtService;
@@ -51,7 +43,6 @@ public class TakeQuizWebSocketServiceImpl implements TakeQuizWebSocketService {
     private final QuestionHistoryRepository questionHistoryRepository;
     private final QuestionRepository questionRepository;
     private final QuizQuestionRepository quizQuestionRepository;
-    private final UserRepository userRepository;
     private final SimpMessagingTemplate template;
 
 
@@ -105,7 +96,8 @@ public class TakeQuizWebSocketServiceImpl implements TakeQuizWebSocketService {
         sendRoomInfo(quiz);
     }
 
-    private void sendRoomInfo(Quiz quiz) {
+    @Override
+    public void sendRoomInfo(Quiz quiz) {
         template.convertAndSend("/play/" + quiz.getCode(), getRoomInfo(quiz));
     }
 
@@ -243,22 +235,6 @@ public class TakeQuizWebSocketServiceImpl implements TakeQuizWebSocketService {
         return getRoomInfo(quiz);
     }
 
-    @Override
-    public void kickPlayer(String quizCode, WebSocketRequest<KickPlayerRequest> body) {
-        Quiz quiz = quizRepository.findByCode(quizCode)
-            .orElseThrow(() -> new NotFoundException("Quiz not found"));
-        User ownQuizUser = jwtService.extractUser(body.getToken());
-        if (ownQuizUser.getUserId() != quiz.getCreatedBy().getUserId()) {
-            throw new ForbiddenException("You are not the owner of this quiz");
-        }
-        if (!quiz.getQuizState().equals(QuizState.WAITING)) {
-            throw new BadRequestException("Quiz is not waiting");
-        }
-        User user = userRepository.findByEmail(body.getData().getEmail())
-            .orElseThrow(() -> new NotFoundException("User not found"));
-        quizJoinedUserRepository.deleteByQuizAndUser(quiz, user);
-        sendRoomInfo(quiz);
-    }
 
     private void sendPlayingResponse(Quiz quiz,
         PlayingResponse<Object> playingResponse
