@@ -22,8 +22,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import tech.qizz.core.entity.User;
-import tech.qizz.core.repository.UserRepository;
 import tech.qizz.core.module.user.dto.ProfileResponse;
+import tech.qizz.core.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -103,6 +103,7 @@ public class JwtService {
 
     public void setJwtToCookie(HttpServletResponse response, String token) {
         Cookie cookie = new Cookie("token", token);
+        cookie.setDomain(".qizz.tech");
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         response.addCookie(cookie);
@@ -113,6 +114,7 @@ public class JwtService {
             String userJson = URLEncoder.encode(mapper.writeValueAsString(user),
                 StandardCharsets.UTF_8);
             Cookie cookie = new Cookie("user", userJson);
+            cookie.setDomain(".qizz.tech");
             cookie.setHttpOnly(true);
             cookie.setPath("/");
             response.addCookie(cookie);
