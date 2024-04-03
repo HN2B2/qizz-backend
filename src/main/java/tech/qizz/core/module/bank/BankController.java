@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,6 +57,33 @@ public class BankController {
             tab,
             draft,
             user
+        );
+        return new ResponseEntity<>(banks, HttpStatus.OK);
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAnyAuthority('USER', 'STAFF', 'ADMIN')")
+    public ResponseEntity<GetAllBanksResponse> getAllBanks(
+            @RequestParam(required = false, defaultValue = "1") Integer page,
+            @RequestParam(required = false, defaultValue = "10") Integer limit,
+            @RequestParam(required = false, defaultValue = "") String keyword,
+            @RequestParam(required = false, defaultValue = "id") String order,
+            @RequestParam(required = false, defaultValue = "desc") String sort,
+            @RequestParam(required = false) List<Long> subCategoryIds,
+            @RequestParam(required = false) Integer mi,
+            @RequestParam(required = false) Integer ma,
+            @RequestUser User user
+    ) {
+        GetAllBanksResponse banks = bankService.getAllBanks(
+                page,
+                limit,
+                keyword,
+                order,
+                sort,
+                subCategoryIds,
+                mi,
+                ma,
+                user
         );
         return new ResponseEntity<>(banks, HttpStatus.OK);
     }
