@@ -102,24 +102,30 @@ public class JwtService {
     }
 
     public void setJwtToCookie(HttpServletResponse response, String token) {
-        Cookie cookie = new Cookie("token", token);
-        cookie.setDomain(".qizz.tech");
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        response.addCookie(cookie);
+        setCookies(response, "token", token);
     }
 
     public void setUserDataToCookie(HttpServletResponse response, ProfileResponse user) {
         try {
             String userJson = URLEncoder.encode(mapper.writeValueAsString(user),
                 StandardCharsets.UTF_8);
-            Cookie cookie = new Cookie("user", userJson);
-            cookie.setDomain(".qizz.tech");
-            cookie.setHttpOnly(true);
-            cookie.setPath("/");
-            response.addCookie(cookie);
+            setCookies(response, "user", userJson);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void setCookies(HttpServletResponse response, String key, String value) {
+        setCookieForDomain(response, key, value, "qizz.tech");
+        setCookieForDomain(response, key, value, "localhost");
+    }
+
+    private void setCookieForDomain(HttpServletResponse response, String key, String value,
+        String domain) {
+        Cookie cookie = new Cookie(key, value);
+        cookie.setDomain(domain);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        response.addCookie(cookie);
     }
 }
