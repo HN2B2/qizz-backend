@@ -130,4 +130,29 @@ Page<QuizBank> findBanks(@Param("keyword") String keyword,
 @Query("SELECT b FROM QuizBank b WHERE EXISTS (SELECT 1 FROM b.subCategories subcat WHERE subcat.category = :category) AND b.quizPublicity=true AND b.draft=false ORDER BY SIZE(b.upVoteUsers) DESC")
 List<QuizBank> findTop5ByCategoryOrderByUpvotesDesc(Category category, Pageable pageable);
 
+    @Query("SELECT DISTINCT b FROM QuizBank b "+
+            "LEFT JOIN b.subCategories subcat " +
+            "LEFT JOIN b.manageBanks mb " +
+            " WHERE " +
+            "((b.name LIKE CONCAT('%', :keyword, '%') OR " +
+            "b.description LIKE CONCAT('%', :keyword, '%')) " +
+            " AND ((b.quizPublicity=true) OR EXISTS (SELECT 1 FROM b.manageBanks mb WHERE :user IN (mb.user)))" +
+            " AND (:mi IS NULL OR SIZE(b.questions) >= :mi)" +
+            " AND (:ma IS NULL OR SIZE(b.questions) <= :ma)" +
+            " AND b.disabled=false" +
+            " AND (:subCategoryId IS NULL OR " +
+            "(SELECT COUNT(DISTINCT sc.subCategoryId) FROM b.subCategories sc WHERE sc.subCategoryId IN :subCategoryId) = :subCategoryCount" +
+            ")" +
+
+            ")"
+    )
+    Page<QuizBank> findBanksByKeyword(
+            @Param("keyword") String keyword,
+            @Param("subCategoryId") List<Long> subCategoryId,
+            @Param("subCategoryCount") int subCategoryCount,
+            @Param("mi") Integer mi, @Param("ma") Integer ma,
+            @Param("user") User user,
+            Pageable pageable
+    );
+
 }

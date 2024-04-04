@@ -1,9 +1,11 @@
 package tech.qizz.core.module.bank;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.SerializationUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -349,6 +351,8 @@ public class BankServiceImpl implements BankService {
         newBank.setDraft(true);
         newBank.setCreatedBy(user);
         newBank.setModifiedBy(user);
+        newBank.setDraft(false);
+        newBank.setDisabled(false);
 
         // Save the duplicated bank to get its ID
         newBank = bankRepository.save(newBank);
@@ -357,15 +361,25 @@ public class BankServiceImpl implements BankService {
         List<Question> newQuestions = new ArrayList<>();
 
         for (Question originalQuestion : originalQuestions) {
-            Question newQuestion = modelMapper.map(originalQuestion, Question.class);
-            // You may need to reset any ID or other properties as needed
+            Question newQuestion = new Question();
+            newQuestion.setQuestionIndex(originalQuestion.getQuestionIndex());
+            newQuestion.setDuration(originalQuestion.getDuration());
+            newQuestion.setDisabled(originalQuestion.getDisabled());
+            newQuestion.setContent(originalQuestion.getContent());
+            newQuestion.setAnswersMetadata(originalQuestion.getAnswersMetadata());
+            newQuestion.setCorrectAnswersMetadata(originalQuestion.getCorrectAnswersMetadata());
+            newQuestion.setExplainAnswer(originalQuestion.getExplainAnswer());
+            newQuestion.setPoint(originalQuestion.getPoint());
+            newQuestion.setType(originalQuestion.getType());
+            newQuestion.setQuizBank(newBank);
+
             newQuestions.add(newQuestion);
         }
 
 // Associate the duplicated questions with the new bank
-        for (Question newQuestion : newQuestions) {
-            newQuestion.setQuizBank(newBank);
-        }
+//        for (Question newQuestion : newQuestions) {
+//            newQuestion.setQuizBank(newBank);
+//        }
 
 // Save the duplicated questions
         newQuestions = questionRepository.saveAll(newQuestions);
@@ -377,5 +391,22 @@ public class BankServiceImpl implements BankService {
         newBank = bankRepository.save(newBank);
 
         return BankResponse.of(bankRepository.save(newBank));
+    }
+
+    @Override
+    public GetAllBanksResponse getAllBanks(
+            Integer page,
+            Integer limit,
+            String keyword,
+            String order,
+            String sort,
+            List<Long> subCategoryIds,
+            Integer mi,
+            Integer ma,
+            User user) {
+        Sort sortType = sort.equalsIgnoreCase("asc") ? Sort.by(order) : Sort.by(order).descending();
+        Pageable pageable = PageRequest.of(page - 1, limit, sortType);
+        Page<QuizBank> banks = bankRepository.findBanksByKeyword(keyword, (subCategoryIds==null||subCategoryIds.isEmpty())?null:subCategoryIds, (subCategoryIds==null||subCategoryIds.isEmpty())?0:subCategoryIds.size(), mi, ma, user, pageable);
+        return GetAllBanksResponse.of(banks);
     }
 }

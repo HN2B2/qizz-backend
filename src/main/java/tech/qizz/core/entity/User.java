@@ -90,7 +90,6 @@ public class User implements UserDetails {
         createdAt = new Date();
         modifiedAt = createdAt;
         banned = false;
-        enabled = false;
     }
 
     @PreUpdate
