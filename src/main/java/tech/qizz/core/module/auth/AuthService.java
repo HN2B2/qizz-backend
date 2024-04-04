@@ -30,4 +30,6 @@ public interface AuthService {
     AuthResponse createGuest(CreateGuestRequest body, HttpServletResponse response);
 
     AuthResponse verify(VerifyRequest body, HttpServletResponse response);
+
+    void logout(HttpServletResponse response);
 }

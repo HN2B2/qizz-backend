@@ -13,6 +13,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import tech.qizz.core.entity.User;
+import tech.qizz.core.entity.constant.UserRole;
+import tech.qizz.core.exception.BadRequestException;
+import tech.qizz.core.exception.ConflictException;
+import tech.qizz.core.exception.NotFoundException;
 import tech.qizz.core.module.auth.dto.AuthResponse;
 import tech.qizz.core.module.auth.dto.CheckResetTokenRequest;
 import tech.qizz.core.module.auth.dto.CreateGuestRequest;
@@ -22,13 +27,8 @@ import tech.qizz.core.module.auth.dto.RegisterRequest;
 import tech.qizz.core.module.auth.dto.ResetPasswordRequest;
 import tech.qizz.core.module.auth.dto.VerifyRequest;
 import tech.qizz.core.module.auth.jwt.JwtService;
-import tech.qizz.core.entity.User;
-import tech.qizz.core.entity.constant.UserRole;
-import tech.qizz.core.exception.BadRequestException;
-import tech.qizz.core.exception.ConflictException;
-import tech.qizz.core.exception.NotFoundException;
-import tech.qizz.core.repository.UserRepository;
 import tech.qizz.core.module.user.dto.ProfileResponse;
+import tech.qizz.core.repository.UserRepository;
 import tech.qizz.core.util.Helper;
 
 @Service
@@ -219,5 +219,10 @@ public class AuthServiceImpl implements AuthService {
             .user(ProfileResponse.of(user))
             .token(token)
             .build();
+    }
+
+    @Override
+    public void logout(HttpServletResponse response) {
+        jwtService.removeUserCookies(response);
     }
 }

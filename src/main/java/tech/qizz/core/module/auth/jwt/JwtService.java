@@ -115,14 +115,33 @@ public class JwtService {
         }
     }
 
+    public void removeUserCookies(HttpServletResponse response) {
+        removeCookies(response, "token");
+        removeCookies(response, "user");
+    }
+
     public void setCookies(HttpServletResponse response, String key, String value) {
         setCookieForDomain(response, key, value, "qizz.tech");
         setCookieForDomain(response, key, value, "localhost");
     }
 
+    public void removeCookies(HttpServletResponse response, String key) {
+        removeCookieForDomain(response, key, "qizz.tech");
+        removeCookieForDomain(response, key, "localhost");
+    }
+
     private void setCookieForDomain(HttpServletResponse response, String key, String value,
         String domain) {
         Cookie cookie = new Cookie(key, value);
+        cookie.setDomain(domain);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+    }
+
+    private void removeCookieForDomain(HttpServletResponse response, String key, String domain) {
+        Cookie cookie = new Cookie(key, "");
+        cookie.setMaxAge(0);
         cookie.setDomain(domain);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
