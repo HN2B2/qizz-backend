@@ -392,4 +392,21 @@ public class BankServiceImpl implements BankService {
 
         return BankResponse.of(bankRepository.save(newBank));
     }
+
+    @Override
+    public GetAllBanksResponse getAllBanks(
+            Integer page,
+            Integer limit,
+            String keyword,
+            String order,
+            String sort,
+            List<Long> subCategoryIds,
+            Integer mi,
+            Integer ma,
+            User user) {
+        Sort sortType = sort.equalsIgnoreCase("asc") ? Sort.by(order) : Sort.by(order).descending();
+        Pageable pageable = PageRequest.of(page - 1, limit, sortType);
+        Page<QuizBank> banks = bankRepository.findBanksByKeyword(keyword, (subCategoryIds==null||subCategoryIds.isEmpty())?null:subCategoryIds, (subCategoryIds==null||subCategoryIds.isEmpty())?0:subCategoryIds.size(), mi, ma, user, pageable);
+        return GetAllBanksResponse.of(banks);
+    }
 }

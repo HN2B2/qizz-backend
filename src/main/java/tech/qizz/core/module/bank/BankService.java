@@ -30,6 +30,10 @@ public interface BankService {
         User user
     );
 
+    public GetAllBanksResponse getAllBanks(
+            Integer page, Integer limit, String keyword, String order, String sort, List<Long> subCategoryIds, Integer mi, Integer ma, User user
+    );
+
     public List<BanksByCategoryResponse> getListBanksByCategories(Long top);
 
     public UpvoteResponse isUpvoted(Long id, User user);
