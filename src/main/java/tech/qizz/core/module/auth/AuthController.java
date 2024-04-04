@@ -53,6 +53,14 @@ public class AuthController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<HttpStatus> logout(
+        HttpServletResponse response
+    ) {
+        authService.logout(response);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PostMapping("/verify")
     public ResponseEntity<AuthResponse> verify(
         @Valid @RequestBody VerifyRequest body,
