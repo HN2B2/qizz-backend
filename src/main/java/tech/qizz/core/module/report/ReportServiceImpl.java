@@ -8,9 +8,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import tech.qizz.core.entity.QuestionHistory;
 import tech.qizz.core.entity.Quiz;
+import tech.qizz.core.entity.QuizJoinedUser;
 import tech.qizz.core.entity.User;
 import tech.qizz.core.exception.NotFoundException;
+import tech.qizz.core.module.report.dto.AllParticipantQuestionDetailResponse;
+import tech.qizz.core.module.report.dto.AllParticipantQuizResponse;
+import tech.qizz.core.repository.QuizJoinedUserRepository;
 import tech.qizz.core.repository.QuizRepository;
 import tech.qizz.core.module.report.dto.GetAllReportResponse;
 import tech.qizz.core.module.report.dto.ReportDetailResponse;
@@ -20,6 +25,7 @@ import tech.qizz.core.module.report.dto.ReportDetailResponse;
 public class ReportServiceImpl implements ReportService {
 
     private final QuizRepository quizRepository;
+    private final QuizJoinedUserRepository quizJoinedUserRepository;
 
     @SneakyThrows
     @Override
@@ -63,5 +69,18 @@ public class ReportServiceImpl implements ReportService {
         Quiz quiz = quizRepository.findById(quizId)
             .orElseThrow(() -> new NotFoundException("Quiz not found"));
         return ReportDetailResponse.of(quiz);
+    }
+    @Override
+    public AllParticipantQuizResponse getAllParticipantQuizResponse(Long quizId) {
+        Quiz quiz = quizRepository.findById(quizId)
+                .orElseThrow(() -> new NotFoundException("Quiz not found"));
+        return AllParticipantQuizResponse.of(quiz.getQuizJoinedUsers());
+    }
+
+    @Override
+    public AllParticipantQuestionDetailResponse getAllParticipantQuestionDetailResponse(Long quizJoinedUserId) {
+        QuizJoinedUser quizJoinedUser = quizJoinedUserRepository.findById(quizJoinedUserId)
+                .orElseThrow(() -> new NotFoundException("Quiz joined user not found"));
+        return AllParticipantQuestionDetailResponse.of(quizJoinedUser.getQuestionHistories());
     }
 }
