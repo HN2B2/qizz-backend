@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tech.qizz.core.annotation.RequestUser;
 import tech.qizz.core.entity.User;
+import tech.qizz.core.module.report.dto.AllParticipantQuestionDetailResponse;
+import tech.qizz.core.module.report.dto.AllParticipantQuizResponse;
 import tech.qizz.core.module.report.dto.GetAllReportResponse;
 import tech.qizz.core.module.report.dto.ReportDetailResponse;
 
@@ -54,5 +56,23 @@ public class ReportController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/{quizId}/participant")
+    @PreAuthorize("hasAnyAuthority('USER', 'STAFF', 'ADMIN')")
+    public ResponseEntity<AllParticipantQuizResponse> getAllParticipant(
+        @PathVariable Long quizId, @RequestUser User user
+    ) {
+        AllParticipantQuizResponse participants = reportService.getAllParticipantQuizResponse(quizId);
+        return new ResponseEntity<>(participants, HttpStatus.OK);
+    }
+
+    @GetMapping("/{quizId}/participant/{quizJoinedUserId}")
+    @PreAuthorize("hasAnyAuthority('USER', 'STAFF', 'ADMIN')")
+    public ResponseEntity<AllParticipantQuestionDetailResponse> getDetailParticipant(
+        @PathVariable Long quizId, @PathVariable Long quizJoinedUserId, @RequestUser User user
+    ) {
+        AllParticipantQuestionDetailResponse participants = reportService.getAllParticipantQuestionDetailResponse(quizJoinedUserId);
+        return new ResponseEntity<>(participants, HttpStatus.OK);
     }
 }
